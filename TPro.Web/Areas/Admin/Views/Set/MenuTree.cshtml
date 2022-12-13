@@ -1,0 +1,133 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_layout.cshtml";
+}
+<div>
+    <div class="block">
+        <el-tree :data="tree"
+                 show-checkbox
+                 node-key="Id"
+                 :props="{children:'Children',label:'MenuName'}"
+                 :expand-on-click-node="false">
+            <div class="custom-tree-node" slot-scope="{ node, data }">
+                <div class="tree-node-label">{{ data.MenuName }}</div>
+                <div class="tree-node-operate">
+                    <el-button type="text"
+                               size="mini"
+                               @@click="() => append(data)">
+                        AppendChild
+                    </el-button>
+                    <el-button type="text"
+                               size="mini"
+                               @@click="() => remove(node, data)">
+                        Delete
+                    </el-button>
+                    <el-button type="text"
+                               size="mini"
+                               @@click="() => change(node, data)">
+                        Change
+                    </el-button>
+                </div>
+            </div>
+        </el-tree>
+    </div>
+    <el-dialog :visible.sync="dialogVisible" width="50%">
+        <el-form v-model="newchild" label-position="right" label-width="100px">
+            <el-form-item label="名称">
+                <el-input v-model="newchild.MenuName"></el-input>
+            </el-form-item>
+            <el-form-item label="路由">
+                <el-input v-model="newchild.RoutePath"></el-input>
+            </el-form-item>
+            <el-form-item label="图标路径">
+                <el-input v-model="newchild.IconPath"></el-input>
+            </el-form-item>
+            <el-form-item label="活动图标路径">
+                <el-input v-model="newchild.ActiveIconPath"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @@click="submitForm">立即创建</el-button>
+                <el-button @@click="resetForm">重置</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+</div>
+
+@section Scripts{
+    <script>
+        var mixin = {
+            data() {
+                return {
+                    dialogVisible: false,
+                    nowparent: {},
+                    newchild: { Id: 0, ParentId: 0, MenuName: '', RoutePath: '', IconPath: '', ActiveIconPath: '', Children: [] },
+                    tree: [],
+                    isedit: false,
+                }
+            },
+            computed: {
+
+            },
+            mounted() {
+                this.gettree();
+            },
+            methods: {
+                append(data) {
+                    console.log(data)
+                    this.nowparent = data
+                    this.newchild.ParentId = data.Id
+                    this.isedit = false
+                    this.dialogVisible = true;
+                },
+                change(node, data) {
+                    console.log(node, data)
+                    this.newchild = JSON.parse(JSON.stringify(data))
+                    this.isedit = true;
+                    this.dialogVisible = true;
+                },
+                gettree() {
+                    axios.get("/Admin/Home/GetMenuTree")
+                        .then((res) => {
+                            if (res.data.Code == 200) {
+                                this.tree = res.data.Data;
+                            }
+                        }).catch(err => console.error(err))
+                        .finally()
+                },
+                remove(node, data) {
+                    console.log(node, data)
+                    this.$confirm("是否确认删除该导航节点", "确认信息", {
+                        distinguishCancelAndClose: true,
+                        confirmButtonText: '确认',
+                        cancelButtonText: '取消'
+                    }).then(() => {
+                        axios.get("/Admin/Set/RemoveMenuNode?mid=" + data.Id)
+                            .then((res) => {
+                                if (res.data.Code == 200) {
+                                    this.tree = res.data.Data;
+                                    this.gettree();
+                                }
+                            }).catch(err => console.error(err))
+                            .finally()
+                    }).catch(action => {
+
+                    })
+                },
+                resetForm() {
+
+                },
+                submitForm() {
+                    axios.post("/Admin/Set/SaveMenuNode", this.newchild)
+                        .then((res) => {
+                            if (res.data.Code == 200) {
+                                this.$message.success("成功")
+                                this.dialogVisible = false;
+                                this.gettree();
+                            }
+                        }).catch(err => console.error(err))
+                        .finally()
+
+                }
+            }
+        }
+    </script>
+}

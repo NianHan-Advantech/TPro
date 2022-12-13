@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TPro.Common\TPro.Common.csproj" />
+    <ProjectReference Include="..\TPro.EntityFramework\TPro.EntityFramework.csproj" />
+    <ProjectReference Include="..\TPro.Models\TPro.Models.csproj" />
+  </ItemGroup>
+
+</Project>

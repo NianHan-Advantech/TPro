@@ -1,0 +1,161 @@
+﻿* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+p {
+  margin: 0;
+}
+.dashboard {
+  background-color: #ffffff;
+  width: 100%;
+  height: calc(100vh - 60px);
+}
+.dashboard .dashboard-header div h3 {
+  margin-left: 10px;
+}
+.dashboard .dashboard-header .headerinfo {
+  display: inline-flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.dashboard .dashboard-header .headerinfo div {
+  margin-right: 30px;
+}
+.dashboard .dashboard-header .headerinfo .headerinfo-item .dropdown .btn-default {
+  width: 200px;
+  text-align: left;
+  position: relative;
+}
+.dashboard .dashboard-header .headerinfo .headerinfo-item .dropdown .btn-default .downicon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  font-size: 8px;
+  background: #e6e6e6;
+}
+.dashboard .dashboard-header .headerinfo .headerinfo-item .dropdown .dropdown-menu {
+  width: 200px;
+}
+.dashboard .dashboard-header .headerinfo .headerinfo-item .input-group {
+  position: relative;
+  width: 200px;
+}
+.dashboard .dashboard-header .headerinfo .headerinfo-item .input-group .form-control {
+  display: flex;
+  flex-direction: row-reverse;
+  border-radius: 4px;
+}
+.dashboard .dashboard-header .headerinfo .headerinfo-item .input-group .downicon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  font-size: 8px;
+  background: #e6e6e6;
+  border: 1px solid #ccc;
+  border-radius: 0 4px 4px 0;
+  border-left: 0;
+  z-index: 10;
+}
+.dashboard .dashboard-header .headerinfo .headerinfo-item .input-group .downicon:hover {
+  cursor: pointer;
+}
+.dashboard .dashboard-title {
+  display: flex;
+  justify-content: space-around;
+}
+.dashboard .dashboard-title .title-item {
+  width: 20%;
+  border-radius: 1px;
+  border: 1px solid #e6e6e6;
+}
+.dashboard .dashboard-title .title-item .title-item-header {
+  text-align: center;
+  background: #e6e6e6;
+}
+.dashboard .dashboard-title .title-item .title-item-body {
+  display: flex;
+  align-items: flex-end;
+}
+.dashboard .dashboard-title .title-item .title-item-body .item-body-left {
+  width: 70%;
+}
+.dashboard .dashboard-title .title-item .title-item-body .item-body-left .per {
+  margin-left: 20px;
+  font-size: 50px;
+}
+.dashboard .dashboard-title .title-item .title-item-body .item-body-left .perunit {
+  font-size: 20px;
+}
+.dashboard .dashboard-title .title-item .title-item-body .item-body-right {
+  color: gray;
+}
+.dashboard .dashboard-content {
+  margin-top: 5px;
+}
+.dashboard .dashboard-content .panel-list {
+  display: flex;
+  border: 0.5px solid gray;
+  background: #e6e6e6;
+  color: gray;
+}
+.dashboard .dashboard-content .panel-list .panel-item {
+  border-right: 0.5px solid gray;
+  height: 50px;
+  line-height: 40px;
+  font-size: 20px;
+  padding: 5px 20px;
+}
+.dashboard .dashboard-content .panel-list .panel-item:hover {
+  cursor: pointer;
+}
+.dashboard .dashboard-content .panel-list .panel-item-clicked {
+  background: #fff;
+  box-shadow: 1px 1px 0px 2px rgba(0, 0, 0, 0.3) inset;
+}
+.dashboard .dashboard-content .content-body table {
+  width: 100%;
+}
+.dashboard .dashboard-content .content-body table thead tr > th {
+  text-align: center;
+  color: #43bce7;
+  vertical-align: middle;
+  padding: 5px 0;
+}
+.dashboard .dashboard-content .content-body table tbody tr > td {
+  text-align: right;
+  padding: 5px 5px;
+}
+.dashboard .dashboard-content .content-body table tbody tr > td .td-warning {
+  display: inline-block;
+  background-color: #ffb700;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 16px;
+  margin-right: 10px;
+}
+.dashboard .dashboard-content .content-body .total-table tbody tr > td:first-child {
+  text-align: center;
+  color: #43bce7;
+}
+.dashboard .dashboard-content .content-body .decimal-table tbody tr > td {
+  text-align: center;
+  padding: 5px 5px;
+}
+.dashboard .dashboard-content .content-body .decimal-table tbody tr:nth-last-child(1) > td {
+  border-bottom: 1px solid #ddd;
+}

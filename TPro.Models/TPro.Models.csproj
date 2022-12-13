@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Admin\HomeDtos\" />
+    <Folder Include="Api\ApiBaseDtos\" />
+    <Folder Include="Api\OpenDtos\" />
+    <Folder Include="HomeDtos\" />
+    <Folder Include="OpenDtos\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mapster" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TPro.EntityFramework\TPro.EntityFramework.csproj" />
+  </ItemGroup>
+
+</Project>

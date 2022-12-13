@@ -1,0 +1,84 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_layout.cshtml";
+}
+<el-container>
+    <el-aside width="200px">
+        <el-menu class="el-menu-vertical-demo" @@select="selectitem">
+            <el-menu-item v-for="one,i in tableinfos" :key="i" :index="i.toString()">
+                <template slot="title">
+                    {{one.label}}
+                </template>
+            </el-menu-item>
+        </el-menu>
+    </el-aside>
+    <el-main>
+        <el-form ref="form" :model="form" label-width="200px">
+            <el-form-item :label="item.name" v-for="item,i in objinfo" :key="i">
+                <template v-if="item.type=='String'">
+                    <el-input v-model="item.value"></el-input>
+                </template>
+                <template v-else-if="item.type=='Boolean'">
+                    <el-switch v-model="item.value"
+                               active-color="#13ce66"
+                               inactive-color="#ff4949">
+                    </el-switch>
+                </template>
+                <template v-else-if="item.type=='Int32'">
+                    <el-input-number v-model="item.value" controls-position="right" :min="-1" :max="10"></el-input-number>
+                </template>
+                <template v-else>
+                    无法识别的类型：{{item.type}}
+                </template>
+            </el-form-item>
+        </el-form>
+    </el-main>
+</el-container>
+
+@section Scripts{
+    <script>
+        var mixin = {
+            data() {
+                return {
+                    tableinfos: [],
+                    objinfo: [],
+                    form: {
+
+                    }
+                }
+            },
+            computed:{
+                
+            },
+            mounted() {
+                this.gettablenames();
+            },
+            methods: {
+                gettablenames() {
+                    axios.get("/admin/home/GetAllTableNames")
+                        .then((res) => {
+                            if (res.data.code == 200) {
+                                this.tableinfos = res.data.data;
+                            }
+                        }).catch(err => console.error(err))
+                        .finally()
+                },
+                isdisabled(item){
+
+                },
+                selectitem(index, path) {
+                    console.log(index, this.tableinfos[index])
+                    var nowtable = this.tableinfos[index].value;
+                    axios.get("/admin/DbManage/GetTableInfo?fullname=" + nowtable)
+                        .then((res) => {
+                            console.log(res)
+                            if (res.data.code == 200) {
+                                this.objinfo = res.data.data;
+                            }
+                        }).catch(err => console.error(err))
+                        .finally()
+                },
+
+            }
+        }
+    </script>
+}

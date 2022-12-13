@@ -1,0 +1,10 @@
+﻿[
+  {
+    "outputFile": "wwwroot/css/layout.css",
+    "inputFile": "wwwroot/css/layout.less"
+  },
+  {
+    "outputFile": "wwwroot/css/admin/adminsite.css",
+    "inputFile": "wwwroot/css/admin/adminsite.less"
+  }
+]
