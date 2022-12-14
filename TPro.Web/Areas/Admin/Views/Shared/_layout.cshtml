@@ -12,13 +12,12 @@
     <div id="app">
         <el-container>
             <el-header>
-
                 <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @@select="handleSelect">
                     <span>
                         Custom
                     </span>
                     <span>
-                        <i :class="isCollapse?'el-icon-s-unfold':'el-icon-s-fold'" @@click="isCollapse=!isCollapse"></i>
+                        <i :class="isCollapse?'el-icon-s-unfold':'el-icon-s-fold'" @@click="changecollapse"></i>
                     </span>
                 </el-menu>
             </el-header>
@@ -30,20 +29,20 @@
                              @@select="handleTableSelect">
                         <div v-for="(one,i) in menutree" :key="i">
                             <template v-if="one.Children.length>0">
-                                <el-submenu :index="i.toString()">
+                                <el-submenu :index="countindex(i)">
                                     <template slot="title">
-                                        <img :src="'i.toString()==activeIndex'?one.ActiveIconPath:one.IconPath" />
-                                        <span>{{one.MenuName}}</span>
+                                        <img :src="countindex(i)===activeIndex?one.IconPath:one.IconPath" />
+                                        <span slot="title">{{one.MenuName}}</span>
                                     </template>
-                                    <el-menu-item v-for="(two,j) in one.Children" :key="j" :index="i.toString()+'-'+j.toString()">
-                                        <img :src="'(i.toString()+'-'+j.toString())==activeIndex'?two.ActiveIconPath:two.IconPath" />
+                                    <el-menu-item v-for="(two,j) in one.Children" :key="j" :index="countindex(i,j)">
+                                        <img :src="countindex(i,j)===activeIndex?two.ActiveIconPath:two.IconPath" />
                                         {{two.MenuName}}
                                     </el-menu-item>
                                 </el-submenu>
                             </template>
                             <template v-else>
-                                <el-menu-item :index="i.toString()">
-                                    <img :src="'i.toString()==activeIndex'?one.ActiveIconPath:one.IconPath" />
+                                <el-menu-item :index="countindex(i)">
+                                    <img :src="countindex(i)==activeIndex?one.ActiveIconPath:one.IconPath" />
                                     <template slot="title">
                                         {{one.MenuName}}
                                     </template>
@@ -77,14 +76,34 @@
                 return {
                     activeIndex: '1',
                     isCollapse: true,
-                    testmsg: 'test',
                     menutree: []
                 }
             },
+            watch: {
+                isCollapse(val) {
+                    console.log(val)
+                }
+            },
             mounted() {
+                this.initapp()
                 this.getmenutree()
             },
             methods: {
+                changecollapse() {
+                    this.isCollapse = !this.isCollapse
+                    localStorage.setItem("isCollapse", this.isCollapse ? "1" : "0")
+                },
+                countindex() {
+                    var index = ''
+                    for (let i = 0; i < arguments.length; i++) {
+                        if (i > 0) {
+                            index = `${index}-${arguments[i]}`
+                        } else {
+                            index = `${arguments[i]}`
+                        }
+                    }
+                    return index;
+                },
                 getmenutree() {
                     axios.get("/admin/home/GetMenuTree")
                         .then((res) => {
@@ -99,10 +118,11 @@
                 },
                 handleTableSelect(key, keyPath) {
                     this.activeIndex = key
-                    var indexs = key.split('-')
-                    var node = this.menutree
-                    indexs.forEach((item, i) => {
-                        if (i == 0) {
+                    localStorage.setItem("activeindex", key)
+                    let indexs = key.split('-')
+                    let node = this.menutree
+                    indexs.forEach((item, j) => {
+                        if (j == 0) {
                             node = node[item]
                         } else {
                             node = node.Children[item]
@@ -113,6 +133,11 @@
                     } else {
                         window.location.href = node.RoutePath
                     }
+                },
+                initapp() {
+                    this.activeIndex = localStorage.getItem("activeindex") ?? "1"
+
+                    this.isCollapse = localStorage.getItem("isCollapse") == 1
                 }
             }
         })

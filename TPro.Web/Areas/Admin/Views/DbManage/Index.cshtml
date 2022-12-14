@@ -12,22 +12,28 @@
         </el-menu>
     </el-aside>
     <el-main>
+        <el-card>
+            <div slot="header" class="clearfix">
+                <el-button>添加</el-button>
+            </div>
+        </el-card>
+
         <el-form ref="form" :model="form" label-width="200px">
-            <el-form-item :label="item.name" v-for="item,i in objinfo" :key="i">
-                <template v-if="item.type=='String'">
-                    <el-input v-model="item.value"></el-input>
+            <el-form-item :label="item.Name" v-for="item,i in objinfo" :key="i">
+                <template v-if="item.Type=='String'">
+                    <el-input v-model="item.Value"></el-input>
                 </template>
-                <template v-else-if="item.type=='Boolean'">
-                    <el-switch v-model="item.value"
+                <template v-else-if="item.Type=='Boolean'">
+                    <el-switch v-model="item.Value"
                                active-color="#13ce66"
                                inactive-color="#ff4949">
                     </el-switch>
                 </template>
-                <template v-else-if="item.type=='Int32'">
-                    <el-input-number v-model="item.value" controls-position="right" :min="-1" :max="10"></el-input-number>
+                <template v-else-if="item.Type=='Int32'">
+                    <el-input-number v-model="item.Value" controls-position="right" :min="-1" :max="10"></el-input-number>
                 </template>
                 <template v-else>
-                    无法识别的类型：{{item.type}}
+                    无法识别的类型：{{item.Type}}
                 </template>
             </el-form-item>
         </el-form>
@@ -56,8 +62,8 @@
                 gettablenames() {
                     axios.get("/admin/home/GetAllTableNames")
                         .then((res) => {
-                            if (res.data.code == 200) {
-                                this.tableinfos = res.data.data;
+                            if (res.data.Code == 200) {
+                                this.tableinfos = res.data.Data;
                             }
                         }).catch(err => console.error(err))
                         .finally()
@@ -71,8 +77,8 @@
                     axios.get("/admin/DbManage/GetTableInfo?fullname=" + nowtable)
                         .then((res) => {
                             console.log(res)
-                            if (res.data.code == 200) {
-                                this.objinfo = res.data.data;
+                            if (res.data.Code == 200) {
+                                this.objinfo = res.data.Data;
                             }
                         }).catch(err => console.error(err))
                         .finally()
