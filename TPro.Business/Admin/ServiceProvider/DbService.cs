@@ -13,9 +13,7 @@ namespace TPro.Business.Admin.ServiceProvider
     {
         public ResponseModel GetTableInfos()
         {
-            using var helper = new EntityFramework.Data.JurisdictionData();
-            var res = helper.GetAllTableNames().Select(e => new WebItem { key = e, value = e, label = e }).ToList();
-            return res.Any() ? Success(res) : Fail();
+            return Success();
         }
 
         public ResponseModel GetAllTableNames()

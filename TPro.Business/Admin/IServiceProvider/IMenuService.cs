@@ -3,6 +3,7 @@ using TPro.Models.ResponseDtos;
 
 namespace TPro.Business.Admin.IServiceProvider
 {
+
     public interface IMenuService
     {
         ResponseModel GetMenuTree();

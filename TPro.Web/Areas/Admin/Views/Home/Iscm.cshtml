@@ -71,7 +71,7 @@
                     <div :class="nowindex==i?'panel-item panel-item-clicked':'panel-item'" @@click="checkitem(item,i)" v-for="item,i in panellist" :key="i">{{item.label}}</div>
                 </div>
                 <div class="content-body">
-                    <table v-if="nowindex<0" border="1" class="table total-table">
+                    <table v-if="nowindex==0" border="1" class="table total-table">
                         <thead>
                             <tr v-for="one,i in thlist" :key="i">
                                 <th v-for="two,j in one.list" :key="j" :rowspan="two.rowspan" :colspan="two.colspan">
@@ -82,7 +82,7 @@
                         <tbody>
                             <tr v-for="one,i in tbdlist" :key="i">
                                 <td v-for="two,j in one" :key="j">
-                                    <span v-show="false"  class="td-warning">!</span>{{two}}
+                                    <span v-show="false" class="td-warning">!</span>{{two}}
                                 </td>
                             </tr>
                         </tbody>
@@ -132,12 +132,13 @@
                         { name: '工单摆放/最大产值占比', per: 118, equalway: '<', target: 120, unit: '%' },
                     ],
                     panellist: [
-                        { label: '自动化异动', value: '', key: 0 },
-                        { label: '异动频次', value: '', key: 1 },
-                        { label: '8周齐料率', value: '', key: 2 },
-                        { label: '异常警示', value: '', key: 3 },
+                        { label: '主面板', value: '' },
+                        { label: '自动化异动', value: '' },
+                        { label: '异动频次', value: '' },
+                        { label: '8周齐料率', value: '' },
+                        { label: '异常警示', value: '' },
                     ],
-                    nowindex: -1,
+                    nowindex: 0,
                     thlayer: 2,
                     thlist: [
                         {

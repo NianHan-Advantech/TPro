@@ -2,23 +2,119 @@
     Layout = "~/Areas/Admin/Views/Shared/_layout.cshtml";
 }
 
+<el-card style="height:100%;">
+    <div slot="header" class="clearfix">
+        <el-button>添加</el-button>
+        <el-input v-model="search" size="mini" placeholder="输入关键字搜索"></el-input>
 
+    </div>
+    <div style="height: 90%;" v-loading="loading">
+        <template>
+            <el-container>
+                <el-main>
+                    <el-table ref="ProcessedTable" :data="ProcessedData" style="width: 100%" height="100%">
+                        <el-table-column v-for="item,i in TableColumns" :key="i" :prop="item.prop" align="center" :label="item.label">
+                        </el-table-column>
+                        <el-table-column  label="操作">
+                            <template slot-scope="scope">
+                                <el-button size="mini"
+                                           @@click="Viewdetails(scope.row,0)">
+                                    查看
+                                </el-button>
+                                <el-button size="mini"
+                                           type="danger"
+                                           @@click="handleDelete(scope.$index, scope.row)">
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-main>
+                <el-footer class="elbody-container-footer">
+                    <el-row :gutter="20">
+                        <el-col :span="16">
+                            <div class="grid-content bg-purple">
+                                <el-pagination background @@size-change="handleSizeChange"
+                                               @@current-change="handleCurrentChange"
+                                               :current-page="currentPage" :page-sizes="[5,10,15,20]"
+                                               :page-size="pagesize"
+                                               layout="total,sizes,prev, pager, next,jumper" :total="Total"
+                                               style="text-align:center;margin:10px;">
+                                </el-pagination>
+                            </div>
+                        </el-col>
+                        <el-col :span="8">
+                            <div class="grid-content bg-purple">&nbsp;</div>
+                        </el-col>
+                    </el-row>
+
+                </el-footer>
+            </el-container>
+        </template>
+    </div>
+</el-card>
 
 @section Scripts{
     <script>
         var mixin = {
             data() {
                 return {
-
+                    search: '',
+                    loading: false,
+                    currentPage: 1,
+                    pagesize: 10,
+                    datalist: [],
+                    TableColumns: [
+                        { prop: 'Route', label: '路由' },
+                        { prop: 'Role', label: '角色' },
+                        { prop: 'Date', label: '权限' },
+                    ],
                 }
             },
             computed: {
+                ProcessedData() {
+                    var arr = this.datalist;
+                    if (this.search.length > 0) {
+                        arr = this.datalist.filter(item => {
+                            return JSON.stringify(item).toLowerCase().includes(this.search.toLowerCase())
+                        })
+                    }
+                    return arr;
+                },
+                Total() {
+                    this.ProcessedData.length
+                },
+                TableData() {
+                    this.ProcessedData.slice((this.currentPage - 1) * this.pagesize, this.currentPage * this.pagesize);
 
+                }
+            },
+            watch: {
+                search() {
+                    this.pagesize = 10;
+                    this.currentPage = 1;
+                }
             },
             mounted() {
+                this.getdatalist();
             },
             methods: {
-
+                getdatalist() {
+                    this.loading = true;
+                    axios.get("/Admin/SysManage/GetRouteJurisd")
+                        .then(res => {
+                            if (res.data.Code == 200) {
+                                this.datalist = res.data.Data;
+                            }
+                        }).catch(err => console.log(err))
+                        .finally(() => this.loading = false)
+                },
+                handleSizeChange(val) {
+                    this.pagesize = val;
+                },
+                handleCurrentChange(val) {
+                    this.currentPage = val;
+                },
             }
         }
     </script>

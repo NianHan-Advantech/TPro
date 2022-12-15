@@ -1,0 +1,62 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#app {
+    width: 100vw;
+    height: 100vh;
+    background: url("../images/background/login-backgroud.jpeg") no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .login-form-box {
+        height: 40%;
+        width: 30%;
+        border-radius: 5px;
+        background-color: #eceeee;
+
+        .login-box-header {
+            border-radius: 5px;
+            width: 100%;
+            height: 50px;
+            background-color: #b5d8de;
+            position: relative;
+
+            img {
+                width: 50%;
+                position: absolute;
+                left: 50%;
+                transform: translate(-50%,calc(80px - 100%))
+            }
+        }
+
+        .login-form-title {
+            text-align: center;
+            height: 30px;
+            background-image: linear-gradient(#b5d8de, #eceeee);
+        }
+
+        .login-form-body {
+            height:calc(100% - 80px);
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .el-form {
+                width: 300px;
+
+                .el-form-item {
+                    .el-form-item__content {
+                        .el-input {
+                            width: 200px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

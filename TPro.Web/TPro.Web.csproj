@@ -50,4 +50,8 @@
     <ProjectReference Include="..\TPro.Models\TPro.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
 </Project>

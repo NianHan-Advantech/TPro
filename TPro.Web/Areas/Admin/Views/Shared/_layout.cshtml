@@ -14,11 +14,15 @@
             <el-header>
                 <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @@select="handleSelect">
                     <span>
-                        Custom
+                        Admin Icon
                     </span>
                     <span>
                         <i :class="isCollapse?'el-icon-s-unfold':'el-icon-s-fold'" @@click="changecollapse"></i>
                     </span>
+                    <div class="header-right">
+                        <span><a href="../../">主页面</a></span>
+                        <span>{{userinfo}}</span>
+                    </div>
                 </el-menu>
             </el-header>
             <el-container class="custom-container">
@@ -31,7 +35,7 @@
                             <template v-if="one.Children.length>0">
                                 <el-submenu :index="countindex(i)">
                                     <template slot="title">
-                                        <img :src="countindex(i)===activeIndex?one.IconPath:one.IconPath" />
+                                        <img :src="activeIndex.startsWith(countindex(i))?one.ActiveIconPath:one.IconPath" />
                                         <span slot="title">{{one.MenuName}}</span>
                                     </template>
                                     <el-menu-item v-for="(two,j) in one.Children" :key="j" :index="countindex(i,j)">
@@ -76,13 +80,12 @@
                 return {
                     activeIndex: '1',
                     isCollapse: true,
+                    userinfo:'',
                     menutree: []
                 }
             },
             watch: {
-                isCollapse(val) {
-                    console.log(val)
-                }
+                
             },
             mounted() {
                 this.initapp()
@@ -91,7 +94,7 @@
             methods: {
                 changecollapse() {
                     this.isCollapse = !this.isCollapse
-                    localStorage.setItem("isCollapse", this.isCollapse ? "1" : "0")
+                    localStorage.setItem("AdminisCollapse", this.isCollapse ? "1" : "0")
                 },
                 countindex() {
                     var index = ''
@@ -118,7 +121,7 @@
                 },
                 handleTableSelect(key, keyPath) {
                     this.activeIndex = key
-                    localStorage.setItem("activeindex", key)
+                    localStorage.setItem("Adminactiveindex", key)
                     let indexs = key.split('-')
                     let node = this.menutree
                     indexs.forEach((item, j) => {
@@ -135,9 +138,9 @@
                     }
                 },
                 initapp() {
-                    this.activeIndex = localStorage.getItem("activeindex") ?? "1"
-
-                    this.isCollapse = localStorage.getItem("isCollapse") == 1
+                    this.activeIndex = localStorage.getItem("Adminactiveindex") ?? "1"
+                    this.userinfo = localStorage.getItem("userinfo")
+                    this.isCollapse = localStorage.getItem("AdminisCollapse") == 1
                 }
             }
         })

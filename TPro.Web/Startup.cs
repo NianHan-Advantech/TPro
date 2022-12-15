@@ -57,6 +57,7 @@ namespace TPro.Web
             //Admin
             services.AddTransient<IDbService, DbService>();
             services.AddTransient<IMenuService, MenuService>();
+            services.AddTransient<ISysManageService, SysManageService>();
             //default
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAuthService, AuthService>();
@@ -79,7 +80,11 @@ namespace TPro.Web
             #region Cookie
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, config =>
+                {
+                    config.Cookie.Name = "CookieName";
+                    config.LoginPath = "/TPro/Login";
+                });
             services.AddAuthorization(config =>
             {
                 var builder = new AuthorizationPolicyBuilder();

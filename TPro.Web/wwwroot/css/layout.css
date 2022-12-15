@@ -14,9 +14,6 @@ p {
   width: 100%;
   height: calc(100vh - 60px);
 }
-.dashboard .dashboard-header div h3 {
-  margin-left: 10px;
-}
 .dashboard .dashboard-header .headerinfo {
   display: inline-flex;
   justify-content: flex-end;
@@ -75,7 +72,7 @@ p {
 }
 .dashboard .dashboard-title {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 .dashboard .dashboard-title .title-item {
   width: 24%;
@@ -126,14 +123,21 @@ p {
   background: #fff;
   box-shadow: 1px 1px 0px 2px rgba(0, 0, 0, 0.3) inset;
 }
+.dashboard .dashboard-content .content-body {
+  margin-top: 5px;
+}
 .dashboard .dashboard-content .content-body table {
   width: 100%;
+}
+.dashboard .dashboard-content .content-body table thead {
+  background-color: #e6e6e6;
 }
 .dashboard .dashboard-content .content-body table thead tr > th {
   text-align: center;
   color: #43bce7;
   vertical-align: middle;
   padding: 5px 0;
+  border-bottom: 1px solid #fff;
 }
 .dashboard .dashboard-content .content-body table tbody tr > td {
   text-align: right;

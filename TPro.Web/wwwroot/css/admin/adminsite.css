@@ -16,12 +16,17 @@
   height: 100%;
   display: inline-flex;
   align-items: center;
+  position: relative;
 }
 .el-header .el-menu-demo span {
   margin: 0 10px;
 }
 .el-header .el-menu-demo span i {
   font-size: 25px;
+}
+.el-header .el-menu-demo .header-right {
+  position: absolute;
+  right: 0;
 }
 .custom-container {
   height: calc(100vh - 60px);

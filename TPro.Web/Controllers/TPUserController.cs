@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -20,6 +21,7 @@ namespace TPro.Web.Controllers
             _authService = authService;
         }
 
+        [AllowAnonymous]
         [AllowFilter]
         [Route("/TPro/Login")]
         [HttpGet]
@@ -27,10 +29,10 @@ namespace TPro.Web.Controllers
         {
             return View();
         }
-
+        [AllowAnonymous]
         [AllowFilter]
         [HttpPost]
-        public async Task<IActionResult> UserLogin(AuthTPUser authTPUser)
+        public async Task<IActionResult> UserLogin([FromBody]AuthTPUser authTPUser)
         {
             var res = _authService.UserLogin(authTPUser);
             if (res.Code != 200) return Json(res);
@@ -49,7 +51,7 @@ namespace TPro.Web.Controllers
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-            return Redirect("/home/Privacy");
+            return Ok() ;
         }
 
         [HttpGet]
@@ -58,6 +60,5 @@ namespace TPro.Web.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }
-
     }
 }

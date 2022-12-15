@@ -1,10 +1,75 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    Layout = null;
 }
-<form action="/TPUser/UserLogin" method="post">
-    账号：<input type="text" name="Account"/><br />
-    密码：<input type="password" name="PassWord" />
-    <input type="submit" value="登录">
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Login</title>
+    <link rel="stylesheet" href="~/css/elementui.css" />
+    <link rel="stylesheet" href="~/css/login.css" />
+</head>
+<body>
+    <div id="app">
+        <div class="login-form-box">
+            <div class="login-box-header">
+                <img src="~/images/other/tree.png" />
+
+            </div>
+            <div class="login-form-title">
+                <p>登录</p>
+            </div>
+            <div class="login-form-body">
+                <el-form v-model="userinfo" label-width="80px">
+                    <el-form-item label="账号">
+                        <el-input v-model="userinfo.Account"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码">
+                        <el-input show-password v-model="userinfo.PassWord"></el-input>
+                    </el-form-item>
+                    <el-form-item label="">
+                        <el-button type="primary" @@click="submitForm">登录</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/axios.js"></script>
+    <script src="~/lib/vue.js"></script>
+    <script src="~/lib/elementui.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    userinfo: {
+                        Account: '',
+                        PassWord: '',
+                    }
+                }
+            },
+            watch: {
+
+            },
+            mounted() {
+
+            },
+            methods: {
+                submitForm() {
+                    axios.post("/TPUser/UserLogin", this.userinfo)
+                        .then((res) => {
+                            if(res.status==200){
+                                localStorage.setItem("userinfo",this.userinfo.Account)
+                                window.location.href = "/"
+                            }
+                        }).catch(err => console.error(err))
+                        .finally()
+                }
+            }
+        })
+    </script>
+</body>
+</html>
+
+

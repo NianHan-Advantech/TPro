@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace TPro.EntityFramework.Data
 {
+
     public class TPUserData : Repository<Entity.TPUser>
     {
         public Entity.TPUser IsAccountExist(string account)

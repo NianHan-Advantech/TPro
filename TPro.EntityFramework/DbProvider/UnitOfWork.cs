@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TPro.Common.Extentions;
 
 namespace TPro.EntityFramework.DbProvider
 {
@@ -13,6 +14,7 @@ namespace TPro.EntityFramework.DbProvider
         {
             _context = new MyDbContext();
         }
+
         public UnitOfWork(DbAttr dbType)
         {
             _context = new MyDbContext(dbType);
@@ -81,6 +83,52 @@ namespace TPro.EntityFramework.DbProvider
                 .Select(t => t.GetTableName())
                 .Distinct()
                 .ToList();
+        }
+
+        public List<object> GetBySql(Type entitytype, string sql)
+        {
+            var connection = _context.Database.GetDbConnection();
+            if (connection.State != System.Data.ConnectionState.Open)
+            {
+                connection.Open();
+            }
+            using (var command = connection.CreateCommand())
+            {
+                var list = new List<object>();
+                command.CommandText = sql;
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        try
+                        {
+                            var entity = entitytype.Assembly.CreateInstance(entitytype.FullName);
+                            var properties = entitytype.GetProperties();
+                            foreach (var item in properties)
+                            {
+                                try
+                                {
+                                    var value = item.PropertyType.GetDefaultValue();
+                                    value = reader[item.Name];
+                                    item.SetValue(entity, value);
+                                }
+                                catch (Exception ex)
+                                {
+                                    if (ex is ArgumentException)
+                                        continue;
+                                    throw;
+                                }
+                            }
+                            list.Add(entity);
+                        }
+                        catch (Exception)
+                        {
+                            throw;
+                        }
+                    }
+                }
+                return list;
+            }
         }
 
         public int ExecuteSqlRaw(string sqlCommand, params object[] parameters)

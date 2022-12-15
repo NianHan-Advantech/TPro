@@ -5,6 +5,7 @@ using TPro.Web.Filters;
 namespace TPro.Web.Controllers
 {
     [Route("[controller]/[action]")]
+    [Authorize]
     [TypeFilter(typeof(CustomAuthorizeFilter))]
     public class BaseController : Controller
     {

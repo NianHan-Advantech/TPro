@@ -8,6 +8,7 @@ using TPro.Common.Entity;
 using TPro.Common.Extentions;
 using TPro.Common.Utils;
 using TPro.EntityFramework;
+using TPro.EntityFramework.DbProvider;
 using TPro.EntityFramework.Entity;
 
 namespace TPro.UnitTest
@@ -63,6 +64,13 @@ namespace TPro.UnitTest
             //db.SaveChanges();
             //var a = res.GetForeignKeys();
             //var b = res.GetKeys();
+        }
+        [Test]
+        public void Test3()
+        {
+            var user = new TPUser();
+            var db = new UnitOfWork();
+            var list = db.GetBySql(user.GetType(), "SELECT * FROM TPUser");
         }
     }
 }
