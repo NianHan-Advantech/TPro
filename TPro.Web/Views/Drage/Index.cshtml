@@ -1,0 +1,381 @@
+﻿@{
+    ViewData["Title"] = "Drage Resize Rotate Page";
+}
+@section Styles{
+    <style>
+        .box {
+            width: 500px;
+            height: 500px;
+        }
+
+        .infobox {
+            height: 100px;
+            width: 100px;
+        }
+    </style>
+}
+<template>
+    <div class="box">
+        <div class="infobox" v-for="item,i in drrdata.boxlist" :key="i" v-html="item.innerhtml" :style="countstyle(item.cssstyle)"></div>
+    </div>
+</template>
+
+
+
+@section Scripts{
+    <script>
+        var mixin = {
+            data() {
+                return {
+                    drrdata: {
+                        username: 'nian.han',
+                        boxlist: [
+                            {
+                                innerhtml: "<p>box1</p>", cssstyle: {
+                                    width: '100px',
+                                    height: '100px',
+                                    left: '20px',
+                                    top: '50px'
+                                }
+                            },
+                            {
+                                innerhtml: "<b>box2</b>", cssstyle: {
+                                    width: '120px',
+                                    height: '120px',
+                                    left: '100px',
+                                    top: '80px'
+                                }
+                            },
+                        ]
+                    }
+                }
+            },
+            computed: {
+            },
+            mounted() {
+                this.DRR(".infobox", ".box")
+
+            },
+            methods: {
+                countstyle(style) {
+                    let width = style.width 
+                    let height = style.height
+                    let left = style.left
+                    let top = style.top
+                    return {
+                        width,
+                        height,
+                        left,
+                        top,
+                    }
+                },
+                DRR: function (dom, parentdom = "body") {
+
+                    let status = 0
+                    let timetick = new Date().getTime()
+                    let tickstr = timetick - Math.trunc(timetick / 1000000) * 1000000
+                    let guidev = `<div id="guidev${tickstr}" style="width:100%;border-top: 1px dashed #55f; position: absolute;top:0;left:0;"></div>`
+                    let guideh = `<div id="guideh${tickstr}" style="height:100%;border-left: 1px dashed #55f; position: absolute;top:0;left:0;"></div>`
+                    let domborder = `<div style="width:100%;height:100%;position: absolute;top:0;left:0;outline:1px dashed #d6d6d6"></div>`
+                    let domsquire = `<div style="width:8px;height:8px;position: absolute;border:1px solid #6c6c6c"></div>`
+                    let dbd = $(domborder)
+                    let lt = $(domsquire).css({ "top": "-4px", "left": "-4px" })
+                    let lc = $(domsquire).css({ "top": "50%", "left": "-4px", "margin-top": "-4px" })
+                    let lb = $(domsquire).css({ "bottom": "-4px", "left": "-4px" })
+                    let mt = $(domsquire).css({ "top": "-4px", "left": "50%", "margin-left": "-4px" })
+                    let mc = $(domsquire).css({ "top": "-32px", "left": "50%", "margin-left": "-4px", "border-radius": "50%" })
+                    let mb = $(domsquire).css({ "bottom": "-4px", "left": "50%", "margin-left": "-4px" })
+                    let rt = $(domsquire).css({ "top": "-4px", "right": "-4px" })
+                    let rc = $(domsquire).css({ "top": "50%", "right": "-4px", "margin-top": "-4px" })
+                    let rb = $(domsquire).css({ "bottom": "-4px", "right": "-4px" })
+                    //左上右下
+                    let nwse = function () {
+                        $(this).css({ "cursor": "nwse-resize" })
+                    }
+                    //左下右上
+                    let nesw = function () {
+                        $(this).css({ "cursor": "nesw-resize" })
+                    }
+                    //上下
+                    let ns = function () {
+                        $(this).css({ "cursor": "ns-resize" })
+                    }
+                    //左右
+                    let ew = function () {
+                        $(this).css({ "cursor": "ew-resize" })
+                    }
+                    //获取元素rotate
+                    let getangle = function (jqdom) {
+                        try {
+                            let transform = jqdom.css("transform")
+                            var values = transform.split('(')[1].split(')')[0].split(',');
+                            var a = values[0];
+                            var b = values[1];
+                            var angle = Math.round(Math.atan2(b, a) * (180 / Math.PI));
+                            return angle
+                        } catch (err) {
+                            return 0
+                        }
+
+                    }
+                    let initdom = function () {
+                        $(document).on("mouseup mouseleave", function () {
+                            $(document).off("mousemove")
+                            status = 0;
+                        })
+
+                    }
+                    //初始化缩放控件
+                    let initresize = function (angle = 0) {
+
+                        if ((0 <= angle && angle < 22.5) || (337.5 < angle && angle <= 360) || (157.5 < angle && angle < 202.5)) {
+                            console.log(1)
+                            lt.mouseover(nwse)
+                            lt.mousedown(function (e) {
+                                if (status != 0) return
+                                let parent = $(this).parent()
+                                let width = parent.width()
+                                let height = parent.height()
+                                let offset = parent.offset()
+                                let x = offset.left
+                                let y = offset.top
+                                status = 3
+                                $(document).mousemove(function (event) {
+                                    let dx = x - event.pageX
+                                    let dy = y - event.pageY
+                                    parent.width(width + dx)
+                                    parent.height(height + dy)
+                                    parent.offset({ left: event.pageX, top: event.pageY })
+                                })
+                            })
+                            rb.mouseover(nwse)
+                            rb.mousedown(function (e) {
+                                if (status != 0) return
+                                let parent = $(this).parent()
+                                let W0 = parent.width()
+                                let H0 = parent.height()
+                                let offset = parent.offset()
+                                let X0 = offset.left
+                                let Y0 = offset.top
+                                status = 3
+                                $(document).mousemove(function (event) {
+                                    let X = event.pageX
+                                    let Y = event.pageY
+                                    parent.width(X - X0)
+                                    parent.height(Y - Y0)
+                                })
+                            })
+                            rt.mouseover(nesw)
+                            rt.mousedown(function (e) {
+                                if (status != 0) return
+                                let parent = $(this).parent()
+                                let W0 = parent.width()
+                                let H0 = parent.height()
+                                let offset = parent.offset()
+                                let X0 = offset.left
+                                let Y0 = offset.top
+                                status = 3
+                                $(document).mousemove(function (event) {
+                                    let X = event.pageX
+                                    let Y = event.pageY
+                                    parent.width(X - X0)
+                                    parent.height(Y0 - Y + H0)
+                                    parent.offset({ top: Y })
+                                })
+                            })
+                            lb.mouseover(nesw)
+                            lb.mousedown(function (e) {
+                                if (status != 0) return
+                                let parent = $(this).parent()
+                                let W0 = parent.width()
+                                let H0 = parent.height()
+                                let offset = parent.offset()
+                                let X0 = offset.left
+                                let Y0 = offset.top
+                                status = 3
+                                $(document).mousemove(function (event) {
+                                    let X = event.pageX
+                                    let Y = event.pageY
+                                    parent.width(X0 - X + W0)
+                                    parent.height(Y - Y0)
+                                    parent.offset({ left: X })
+                                })
+                            })
+                            mt.mouseover(ns)
+                            mt.mousedown(function (e) {
+                                if (status != 0) return
+                                let parent = $(this).parent()
+                                let W0 = parent.width()
+                                let H0 = parent.height()
+                                let offset = parent.offset()
+                                let X0 = offset.left
+                                let Y0 = offset.top
+                                status = 3
+                                $(document).mousemove(function (event) {
+                                    let X = event.pageX
+                                    let Y = event.pageY
+                                    parent.height(H0 + Y0 - Y)
+                                    parent.offset({ top: Y })
+                                })
+                            })
+                            mb.mouseover(ns)
+                            mb.mousedown(function (e) {
+                                if (status != 0) return
+                                let parent = $(this).parent()
+                                let W0 = parent.width()
+                                let H0 = parent.height()
+                                let offset = parent.offset()
+                                let X0 = offset.left
+                                let Y0 = offset.top
+                                status = 3
+                                $(document).mousemove(function (event) {
+                                    let X = event.pageX
+                                    let Y = event.pageY
+                                    parent.height(Y - Y0)
+                                })
+                            })
+                            lc.mouseover(ew)
+                            lc.mousedown(function (e) {
+                                if (status != 0) return
+                                let parent = $(this).parent()
+                                let W0 = parent.width()
+                                let H0 = parent.height()
+                                let offset = parent.offset()
+                                let X0 = offset.left
+                                let Y0 = offset.top
+                                status = 3
+                                $(document).mousemove(function (event) {
+                                    let X = event.pageX
+                                    let Y = event.pageY
+                                    parent.width(X0 - X + W0)
+                                    parent.offset({ left: X })
+                                })
+                            })
+                            rc.mouseover(ew)
+                            rc.mousedown(function (e) {
+                                if (status != 0) return
+                                let parent = $(this).parent()
+                                let W0 = parent.width()
+                                let H0 = parent.height()
+                                let offset = parent.offset()
+                                let X0 = offset.left
+                                let Y0 = offset.top
+                                status = 3
+                                $(document).mousemove(function (event) {
+                                    let X = event.pageX
+                                    let Y = event.pageY
+                                    parent.width(X - X0)
+                                })
+                            })
+                        }
+                        else if ((22.5 < angle && angle < 67.5) || (202.5 < angle && angle < 247.5)) {
+                            console.log(2)
+                            lt.mouseover(ns)
+                            rb.mouseover(ns)
+                            rt.mouseover(ew)
+                            lb.mouseover(ew)
+                            mt.mouseover(nesw)
+                            mb.mouseover(nesw)
+                            lc.mouseover(nwse)
+                            rc.mouseover(nwse)
+                        }
+                        else if ((67.5 < angle && angle < 112.5) || (247.5 < angle && angle < 292.5)) {
+                            console.log(3)
+                            lt.mouseover(nesw)
+                            rb.mouseover(nesw)
+                            rt.mouseover(nwse)
+                            lb.mouseover(nwse)
+                            mt.mouseover(ew)
+                            mb.mouseover(ew)
+                            lc.mouseover(ns)
+                            rc.mouseover(ns)
+                        }
+                        else if ((112.5 < angle && angle < 157.5) || (292.5 < angle && angle < 337.5)) {
+                            console.log(4)
+                            lt.mouseover(ew)
+                            rb.mouseover(ew)
+                            rt.mouseover(ns)
+                            lb.mouseover(ns)
+                            mt.mouseover(nwse)
+                            mb.mouseover(nwse)
+                            lc.mouseover(nesw)
+                            rc.mouseover(nesw)
+                        }
+                    }
+                    $(dom).css({ "display": "inline-block", "position": "absolute", "top": "50px" })
+                    $(dom).mouseover(function () {
+                        $(dom).css({ "cursor": "move" })
+                    })
+                    $(parentdom).css("position", "relative")
+                    $(parentdom).append(guidev, guideh)
+                    //添加控件
+                    $(dom).mousedown(function () {
+                        $(mc).mouseover(function () {
+                            $(mc).css("cursor", "pointer")
+                        })
+                        // 旋转
+                        $(mc).mousedown(function () {
+                            if (status != 0) return
+                            status = 2
+                            let parent = $(this).parent()
+                            let angle = getangle(parent)
+                            let pp = parent.offset()
+                            let pw = parent.width()
+                            let ph = parent.height()
+                            let px = pp.left + pw / 2
+                            let py = pp.top + ph / 2
+                            $(document).mousemove(function (e) {
+                                let cx = e.pageX
+                                let cy = e.pageY
+                                let dx = cx - px
+                                let dy = cy - py
+                                let deg = dx > 0 ? Math.round(90 + 180 * Math.atan(dy / dx) / Math.PI) : Math.round(270 + 180 * Math.atan(dy / dx) / Math.PI)
+                                $(parent).css("transform", `rotate(${deg}deg)`)
+                                initresize(deg)
+                            })
+                            initdom()
+                        })
+                        $(this).append(dbd, lt, lc, lb, mt, mc, mb, rt, rc, rb)
+                        $(document).click(function (e) {
+                            let rtarget = $(e.target).not(dom)
+                            if (rtarget.length > 0) {
+                                console.log('remove')
+                                dbd.remove()
+                                lt.remove()
+                                lc.remove()
+                                lb.remove()
+                                mt.remove()
+                                mc.remove()
+                                mb.remove()
+                                rt.remove()
+                                rc.remove()
+                                rb.remove()
+                            }
+                        })
+                        let angle = getangle($(this))
+                        initresize(angle)
+                        initdom()
+                    })
+
+                    // 拖动
+                    $(dom).mousedown(function (event) {
+                        if (status != 0) return
+                        status = 1
+                        let that = this
+                        let offset = $(that).offset()
+                        let x = offset.left
+                        let y = offset.top
+                        let dx = x - event.pageX
+                        let dy = y - event.pageY
+                        $(document).mousemove(function (e) {
+                            $(that).offset({ left: e.pageX + dx, top: e.pageY + dy })
+                        })
+                        initdom()
+                    })
+
+
+                },
+            }
+        }
+    </script>
+}

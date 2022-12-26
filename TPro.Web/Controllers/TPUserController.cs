@@ -12,6 +12,7 @@ using TPro.Web.Filters;
 
 namespace TPro.Web.Controllers
 {
+
     public class TPUserController : BaseController
     {
         private readonly IAuthService _authService;

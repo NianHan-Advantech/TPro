@@ -5,4 +5,61 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <div style="white-space:pre-line;">{{informationJSON}}</div>
 </div>
+
+
+
+@section Scripts{
+    <script>
+        var mixin = {
+            data() {
+                return {
+                    informationJSON: ''
+                }
+            },
+            computed: {
+
+            },
+            mounted() {
+                this.jsondelf()
+            },
+            methods: {
+                jsondelf() {
+                    var jt = '{"Code":200,"Result":"Success","Data":[{"RequestId":742,"ModelName":"EKI - 7428G","LabelKind":"ProductLabel","Status":212,"UserEmail":"Jerry.Tsai@advantech.com.tw","SinceLastDay":7},{"RequestId":744,"ModelName":"EKI - 7706G","LabelKind":"ProductLabel","Status":212,"UserEmail":"Jerry.Tsai@advantech.com.tw","SinceLastDay":7},{"RequestId":787,"ModelName":"EKI - 2525I - LA","LabelKind":"ProductLabel","Status":3,"UserEmail":"Jerry.Tsai@advantech.com.tw","SinceLastDay":7},{"RequestId":818,"ModelName":"AIMC - 3403","LabelKind":"ProductLabel","Status":104,"UserEmail":"Miranda.Hsieh@advantech.com.tw","SinceLastDay":21}]}'
+                    var obj = JSON.parse(jt)
+                    var arr = this.toformatjson(obj)
+                    console.log(arr)
+                },
+                toformatjson(obj) {
+                    let arr = []
+                    for (let label in obj) {
+                        let type = typeof (obj[label])
+                        let value = obj[label]
+                        let children = []
+                        console.log(type, obj[label])
+                        switch (type) {
+                            case "object":
+                                if (Array.isArray(obj[label])) {
+                                    children = obj[label].map(item => this.toformatjson(item))
+                                } else {
+                                    children = this.toformatjson(obj[label])
+                                }
+                                value=""
+                                break;
+                            default:
+                                break;
+                        }
+                        let item = {
+                            label,
+                            value,
+                            children
+                        }
+                        arr.push(item)
+                    }
+                    return arr;
+                }
+            }
+        }
+    </script>
+}

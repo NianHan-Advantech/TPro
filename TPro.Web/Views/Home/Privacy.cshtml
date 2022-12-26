@@ -1,6 +1,151 @@
 @{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+
+<div class="text-center">
+    <el-tree :data="data" :props="treeProps" default-expand-all></el-tree>
+</div>
+
+
+
+@section Scripts{
+    <script>
+        var mixin = {
+            data() {
+                return {
+                    treeProps: {
+                        children: 'children',
+                        label: (data, node) => { return data.label + ':' + data.value }
+                    },
+                    data: [],
+                }
+            },
+            computed: {
+
+            },
+            mounted() {
+                this.jsondelf()
+            },
+            methods: {
+                jsondelf() {
+                    var jt = '{"Code":200,"Result":"Success","Data":[{"RequestId":742,"ModelName":"EKI - 7428G","LabelKind":"ProductLabel","Status":212,"UserEmail":"Jerry.Tsai@advantech.com.tw","SinceLastDay":7},{"RequestId":744,"ModelName":"EKI - 7706G","LabelKind":"ProductLabel","Status":212,"UserEmail":"Jerry.Tsai@advantech.com.tw","SinceLastDay":7},{"RequestId":787,"ModelName":"EKI - 2525I - LA","LabelKind":"ProductLabel","Status":3,"UserEmail":"Jerry.Tsai@advantech.com.tw","SinceLastDay":7},{"RequestId":818,"ModelName":"AIMC - 3403","LabelKind":"ProductLabel","Status":104,"UserEmail":"Miranda.Hsieh@advantech.com.tw","SinceLastDay":21}]}'
+                    var obj = JSON.parse(jt)
+                    this.data = this.toformatjson(obj)
+                    console.log(this.data)
+                },
+                toformatjson(obj) {
+                    let arr = []
+                    for (let label in obj) {
+                        let type = typeof (obj[label])
+                        let value = obj[label]
+                        let children = []
+                        switch (type) {
+                            case "object":
+                                if (Array.isArray(obj[label])) {
+                                    value = `[${obj[label].length}]`
+                                    children = obj[label].map((e, i) => {
+                                        let children = this.toformatjson(e);
+                                        return {
+                                            label: i.toString(),
+                                            value: children.length,
+                                            children
+                                        }
+                                    })
+                                } else {
+                                    value = "{}"
+                                    children = this.toformatjson(obj[label])
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                        let item = {
+                            label,
+                            value,
+                            children
+                        }
+                        arr.push(item)
+                    }
+                    return arr;
+                },
+                countobj(obj) {
+                    let arr = []
+                    for (let label in obj) {
+                        let value = obj[label]
+                        let key = 0
+                        let type = typeof (obj[label])
+                        let children = []
+                        switch (type) {
+                            case "object":
+                                if (Array.isArray(obj[label])) {
+                                    children = this.countarr(obj[label])
+                                } else {
+                                    children = this.countobj(obj[label])
+                                }
+                                value = children.length
+                                break;
+                            default:
+                                break;
+                        }
+                        let item = {
+                            label,
+                            value,
+                            key,
+                            type,
+                            children
+                        }
+                    }
+                    return arr;
+                },
+                countarr(arr) {
+                    return arr.map((e, i) => {
+                        let label = i
+                        let children = this.countobj(e)
+                        let value = children.length
+                        let key = 0
+                        let type = typeof (e)
+                        switch (type) {
+                            case "object":
+                                if (Array.isArray(e) {
+                                    children = this.countarr(e)
+                                } else {
+                                    children = this.countobj(e)
+                                }
+                                value = children.length
+                                break;
+                            default:
+                                break;
+                        }
+                        return {
+                            label,
+                            value,
+                            key,
+                            type,
+                            children
+                        }
+                    })
+                },
+                formatobj(obj) {
+                    if (Array.isArray(obj)) {
+
+                    } else {
+                        let label = typeof (obj)
+                        let item = {
+                            label,
+
+                        }
+                    }
+                },
+                formatjson(json = "") {
+                    try {
+                        let obj = JSON.parse(json)
+
+                    } catch (error) {
+                        this.$message.error(error)
+                    }
+                }
+            }
+        }
+    </script>
+}
