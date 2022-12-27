@@ -14,29 +14,44 @@
     <el-main>
         <el-card>
             <div slot="header" class="clearfix">
-                <el-button>添加</el-button>
+                <el-button @@click="addentity">添加</el-button>
             </div>
         </el-card>
 
-        <el-form ref="form" :model="form" label-width="200px">
-            <el-form-item :label="item.Name" v-for="item,i in objinfo" :key="i">
-                <template v-if="item.Type=='String'">
-                    <el-input v-model="item.Value"></el-input>
-                </template>
-                <template v-else-if="item.Type=='Boolean'">
-                    <el-switch v-model="item.Value"
-                               active-color="#13ce66"
-                               inactive-color="#ff4949">
-                    </el-switch>
-                </template>
-                <template v-else-if="item.Type=='Int32'">
-                    <el-input-number v-model="item.Value" controls-position="right" :min="-1" :max="10"></el-input-number>
-                </template>
-                <template v-else>
-                    无法识别的类型：{{item.Type}}
-                </template>
-            </el-form-item>
-        </el-form>
+
+        <el-dialog title="提示"
+                   :visible.sync="dialogVisible"
+                   width="60%">
+            <el-form ref="form" :model="form" label-width="200px">
+                <el-form-item v-for="item,i in objinfo" :key="i" v-show="!item.IsKey" :label="item.IsForiginKey?item.ForiginEntityName:item.Name">
+                    <template v-if="item.IsForiginKey">
+                        <el-select>
+
+                        </el-select>
+                    </template>
+                    <template v-else-if="item.Type=='String'">
+                        <el-input v-model="item.Value"></el-input>
+                    </template>
+                    <template v-else-if="item.Type=='Boolean'">
+                        <el-switch v-model="item.Value"
+                                   active-color="#13ce66"
+                                   inactive-color="#ff4949">
+                        </el-switch>
+                    </template>
+                    <template v-else-if="item.Type=='Int32'">
+                        <el-input-number v-model="item.Value" controls-position="right" :min="-1" :max="10"></el-input-number>
+                    </template>
+                    <template v-else>
+                        无法识别的类型：{{item.Type}}
+                    </template>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary">添加</el-button>
+                    <el-button>取消</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+
     </el-main>
 </el-container>
 
@@ -45,20 +60,34 @@
         var mixin = {
             data() {
                 return {
+                    dialogVisible: false,
                     tableinfos: [],
                     objinfo: [],
+                    datalist: [],
                     form: {
 
                     }
                 }
             },
-            computed:{
-                
+            computed: {
+
             },
             mounted() {
                 this.gettablenames();
             },
             methods: {
+                addentity() {
+                    this.dialogVisible = true;
+                },
+                gettabledatas(item) {
+                    axios.get(`/admin/DbManage/GetTableDatas?fullname=${item.value}&tablename=${item.label}`)
+                        .then((res) => {
+                            if (res.data.Code == 200) {
+                                this.datalist = res.data.Data;
+                            }
+                        }).catch(err => console.error(err))
+                        .finally()
+                },
                 gettablenames() {
                     axios.get("/admin/home/GetAllTableNames")
                         .then((res) => {
@@ -68,12 +97,15 @@
                         }).catch(err => console.error(err))
                         .finally()
                 },
-                isdisabled(item){
+
+                isdisabled(item) {
 
                 },
                 selectitem(index, path) {
                     console.log(index, this.tableinfos[index])
                     var nowtable = this.tableinfos[index].value;
+                    let item = this.tableinfos[index]
+                    this.gettabledatas(item)
                     axios.get("/admin/DbManage/GetTableInfo?fullname=" + nowtable)
                         .then((res) => {
                             console.log(res)
@@ -82,6 +114,7 @@
                             }
                         }).catch(err => console.error(err))
                         .finally()
+
                 },
 
             }

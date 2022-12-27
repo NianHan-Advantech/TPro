@@ -3,7 +3,7 @@ using TPro.EntityFramework.Entity;
 
 namespace TPro.EntityFramework
 {
-    public class MyDbContext : DbContext
+    public class MyDbContext : BaseDbContext
     {
         private readonly string _DbConnectStr;
 

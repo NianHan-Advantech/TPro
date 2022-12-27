@@ -46,6 +46,9 @@
   height: 20px;
   margin-right: 10px;
 }
+.el-main {
+  padding: 10px;
+}
 .el-main div div.block .el-tree .el-tree-node .el-tree-node__content {
   height: 35px !important;
 }
@@ -60,5 +63,24 @@
   height: 100%;
 }
 .el-main .el-container .el-aside .el-menu {
+  height: 100%;
+}
+.table-card {
+  height: 100%;
+}
+.table-card .el-card__header .tablecard-header {
+  display: flex;
+  height: 60px;
+  align-items: center;
+  position: relative;
+}
+.table-card .el-card__header .tablecard-header div.header-right {
+  position: absolute;
+  right: 0;
+}
+.table-card .el-card__body {
+  height: calc(100% - 60px);
+}
+.table-card .el-card__body div.tablecard-body {
   height: 100%;
 }

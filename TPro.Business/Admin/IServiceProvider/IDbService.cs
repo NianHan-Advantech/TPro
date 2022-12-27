@@ -7,5 +7,7 @@ namespace TPro.Business.Admin.IServiceProvider
         ResponseModel GetAllTableNames();
 
         ResponseModel GetTableInfo(string fullname);
+
+        ResponseModel GetTableDatasByType(string entityname, string tablename);
     }
 }

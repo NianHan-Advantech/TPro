@@ -20,6 +20,7 @@ namespace TPro.EntityFramework.DbProvider
             _context = new MyDbContext(dbType);
         }
 
+
         public bool Committed { get; private set; }
 
         public int Commit()
@@ -108,13 +109,16 @@ namespace TPro.EntityFramework.DbProvider
                             {
                                 try
                                 {
-                                    var value = item.PropertyType.GetDefaultValue();
-                                    value = reader[item.Name];
+                                    var value = reader[item.Name];
+                                    if(item.PropertyType.Name.Contains("String"))
+                                        value = value.ToString();
                                     item.SetValue(entity, value);
                                 }
                                 catch (Exception ex)
                                 {
                                     if (ex is ArgumentException)
+                                        continue;
+                                    else if (ex is ArgumentOutOfRangeException)
                                         continue;
                                     throw;
                                 }

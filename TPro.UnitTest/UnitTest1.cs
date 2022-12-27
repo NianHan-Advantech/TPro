@@ -31,16 +31,7 @@ namespace TPro.UnitTest
             var x = user.GetType();
             using var db = new MyDbContext();
             var entitytype = db.Model.FindEntityType(x.FullName);
-            var properties = entitytype.GetProperties();
-            var rlist = properties
-            .Select(e => new EntityProperty
-            {
-                Name = e.Name,
-                ForiginEntityName = e.GetContainingForeignKeys().FirstOrDefault()?.DependentToPrincipal.ClrType.Name ?? "",
-                IsForiginKey = e.IsForeignKey(),
-                IsKey = e.IsKey(),
-                Type = e.ClrType.Name,
-            }).ToList();
+            var properties = entitytype.GetType();
         }
         [Test]
         public void Test2()

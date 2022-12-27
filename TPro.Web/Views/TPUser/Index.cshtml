@@ -19,7 +19,7 @@
             <div class="login-form-title">
                 <p>登录</p>
             </div>
-            <div class="login-form-body">
+            <div class="login-form-body" v-loading="loading">
                 <el-form v-model="userinfo" label-width="80px">
                     <el-form-item label="账号">
                         <el-input v-model="userinfo.Account"></el-input>
@@ -43,6 +43,7 @@
             el: '#app',
             data() {
                 return {
+                    loading: false,
                     userinfo: {
                         Account: '',
                         PassWord: '',
@@ -57,14 +58,15 @@
             },
             methods: {
                 submitForm() {
+                    this.loading = true
                     axios.post("/TPUser/UserLogin", this.userinfo)
                         .then((res) => {
-                            if(res.status==200){
-                                localStorage.setItem("userinfo",this.userinfo.Account)
+                            if (res.status == 200) {
+                                localStorage.setItem("userinfo", this.userinfo.Account)
                                 window.location.href = "/"
                             }
                         }).catch(err => console.error(err))
-                        .finally()
+                        .finally(() => this.loading = false)
                 }
             }
         })

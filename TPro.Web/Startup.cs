@@ -17,6 +17,7 @@ using Mapster;
 using MapsterMapper;
 using TPro.Models.MapsterConfig;
 using Microsoft.Extensions.FileProviders;
+using TPro.Common.Cache;
 
 namespace TPro.Web
 {
@@ -62,6 +63,7 @@ namespace TPro.Web
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAuthService, AuthService>();
 
+            services.AddScoped<MemoryCacheHelper>();
             #endregion “¿¿µ◊¢»Î
 
 

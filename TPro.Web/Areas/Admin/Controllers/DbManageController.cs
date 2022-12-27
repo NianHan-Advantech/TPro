@@ -23,5 +23,11 @@ namespace TPro.Web.Areas.Admin.Controllers
             var res = _dbService.GetTableInfo(fullname);
             return Json(res);
         }
+        [HttpGet]
+        public IActionResult GetTableDatas(string fullname, string tablename)
+        {
+            var res = _dbService.GetTableDatasByType(fullname, tablename);
+            return Json(res);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using TPro.Business.Admin.IServiceProvider;
 using TPro.Common.Entity;
@@ -43,7 +44,13 @@ namespace TPro.Business.Admin.ServiceProvider
             }).ToList();
             return rlist.Any() ? Success(rlist) : Fail();
         }
-
+        public ResponseModel GetTableDatasByType(string entityname,string tablename)
+        {
+            using var db = new MyDbContext();
+            var entitype= db.Model.FindEntityType(entityname).ClrType;
+            var list = db.GetBySql(entitype, $"SELECT * FROM {tablename}");
+            return list.Any() ? Success(list) : Fail();
+        }
         public ResponseModel GetEntityInfo(string entityname, int key)
         {
             using var db = new MyDbContext();

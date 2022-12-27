@@ -21,7 +21,7 @@ namespace TPro.Web.Controllers
         [HttpGet]
         public IActionResult getmsg()
         {
-            _memoryCache.Set(CacheKeys.Entry, "helo");
+            _memoryCache.Set(CacheKeys.Entry, "hello");
             return Ok();
         }
     }

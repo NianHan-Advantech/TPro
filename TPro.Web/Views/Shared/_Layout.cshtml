@@ -30,8 +30,11 @@
                         </el-menu-item>
                     </template>
                 </div>
-                <el-submenu index="-1" style="float:right;">
+                <el-submenu index="-1" style="float:right;" class="user-menu" :popper-append-to-body="false">
                     <template slot="title"><i class="el-icon-user-solid"></i>{{userinfo}}</template>
+                    <el-menu-item index="-1-1"><i class="el-icon-user-solid"></i>个人中心</el-menu-item>
+                    <el-menu-item index="-1-1"> <i class="el-icon-s-tools"></i>设置</el-menu-item>
+                    <el-menu-item index="-1-1"><i class="el-icon-switch-button"></i>退出</el-menu-item>
                 </el-submenu>
                 <el-menu-item index="-2" style="float:right;"><i class="el-icon-message-solid"></i>消息</el-menu-item>
             </el-menu>

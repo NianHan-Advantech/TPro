@@ -18,7 +18,8 @@
         height: 100%;
         display: inline-flex;
         align-items: center;
-position:relative;
+        position: relative;
+
         span {
             margin: 0 10px;
 
@@ -27,9 +28,9 @@ position:relative;
             }
         }
 
-        .header-right{
-            position:absolute;
-            right:0;
+        .header-right {
+            position: absolute;
+            right: 0;
         }
     }
 }
@@ -62,6 +63,8 @@ position:relative;
 }
 
 .el-main {
+    padding: 10px;
+
     div {
         div.block {
             .el-tree {
@@ -90,6 +93,34 @@ position:relative;
             .el-menu {
                 height: 100%;
             }
+        }
+    }
+}
+
+.table-card {
+    height: 100%;
+
+    .el-card__header {
+        .tablecard-header {
+            display: flex;
+            height: 60px;
+            align-items: center;
+            position: relative;
+
+            div.header-right {
+                position: absolute;
+                right: 0;
+            }
+        }
+    }
+
+    .el-card__body {
+        height: calc(100% - 60px);
+
+
+
+        div.tablecard-body {
+            height: 100%;
         }
     }
 }
