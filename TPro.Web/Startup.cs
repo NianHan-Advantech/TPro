@@ -4,20 +4,18 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
 using System.IO;
 using System.Reflection;
-using System;
-using TPro.Business.IServiceProvider;
-using TPro.Business.ServiceProvider;
 using TPro.Business.Admin.IServiceProvider;
 using TPro.Business.Admin.ServiceProvider;
-using Mapster;
-using MapsterMapper;
-using TPro.Models.MapsterConfig;
-using Microsoft.Extensions.FileProviders;
+using TPro.Business.IServiceProvider;
+using TPro.Business.ServiceProvider;
 using TPro.Common.Cache;
+using TPro.Models.AutoMapperConfig;
 
 namespace TPro.Web
 {
@@ -52,9 +50,8 @@ namespace TPro.Web
 
             #endregion øÁ”Ú
 
-            services.AddSingleton(new MapperService());
-
             #region “¿¿µ◊¢»Î
+
             //Admin
             services.AddTransient<IDbService, DbService>();
             services.AddTransient<IMenuService, MenuService>();
@@ -64,8 +61,8 @@ namespace TPro.Web
             services.AddTransient<IAuthService, AuthService>();
 
             services.AddScoped<MemoryCacheHelper>();
-            #endregion “¿¿µ◊¢»Î
 
+            #endregion “¿¿µ◊¢»Î
 
             #region ◊¢≤·Swagger∑˛ŒÒ
 
@@ -95,6 +92,12 @@ namespace TPro.Web
             });
 
             #endregion Cookie
+
+            #region AutoMapper
+
+            services.AddAutoMapper(config => config.AddProfile<MapperConfig>());
+
+            #endregion AutoMapper
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -125,8 +128,8 @@ namespace TPro.Web
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()
             {
-                FileProvider=new PhysicalFileProvider("F:\\staticdir"),
-                RequestPath="/staticdir"
+                FileProvider = new PhysicalFileProvider("F:\\staticdir"),
+                RequestPath = "/staticdir"
             });
             app.UseRouting();
             app.UseCors("CorsSample");//∆Ù”√øÁ”Ú
