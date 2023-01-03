@@ -9,12 +9,4 @@ namespace TPro.Models.Others
         public dynamic label { get; set; }
         public virtual List<WebItem> children { get; set; }
     }
-
-    public class ElTableColumn
-    {
-        public string prop { get; set; }
-        public string label { get; set; }
-        public string width { get; set; }
-        public virtual List<ElTableColumn> children { get; set; }
-    }
 }

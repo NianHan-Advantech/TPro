@@ -59,7 +59,7 @@ namespace TPro.Web.Controllers
         public async Task<IActionResult> UserLogOut()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return View();
+            return Ok();
         }
     }
 }

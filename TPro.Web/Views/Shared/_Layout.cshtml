@@ -34,7 +34,7 @@
                     <template slot="title"><i class="el-icon-user-solid"></i>{{userinfo}}</template>
                     <el-menu-item index="-1-1"><i class="el-icon-user-solid"></i>个人中心</el-menu-item>
                     <el-menu-item index="-1-1"> <i class="el-icon-s-tools"></i>设置</el-menu-item>
-                    <el-menu-item index="-1-1"><i class="el-icon-switch-button"></i>退出</el-menu-item>
+                    <el-menu-item index="-1-1"><a @@click="logout"><i class="el-icon-switch-button"></i>退出</a></el-menu-item>
                 </el-submenu>
                 <el-menu-item index="-2" style="float:right;"><i class="el-icon-message-solid"></i>消息</el-menu-item>
             </el-menu>
@@ -105,6 +105,13 @@
                     //} else {
                     //    window.location.href = node.RoutePath
                     //}
+                },
+                logout() {
+                    axios.get("/TPUser/UserLogOut")
+                        .then((res) => {
+                            window.location.href = "/"
+                        }).catch(err => console.error(err))
+                        .finally(() => this.loading = false)
                 },
                 initapp() {
                     this.userinfo = localStorage.getItem("userinfo")

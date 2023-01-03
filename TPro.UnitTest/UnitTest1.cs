@@ -23,38 +23,15 @@ namespace TPro.UnitTest
         [Test]
         public void Test1()
         {
-            var user = new UserRole()
-            {
 
-            };
-            var m = new List<EntityProperty>();
-            var x = user.GetType();
-            using var db = new MyDbContext();
-            var entitytype = db.Model.FindEntityType(x.FullName);
-            var properties = entitytype.GetType();
         }
         [Test]
         public void Test2()
         {
-            int a = 1;
-            var b = a.GetType().Assembly.CreateInstance(a.GetType().FullName);
-            string c = "xa";
-            //var d = c.GetType().Assembly.CreateInstance(c.GetType().FullName);
-            var e = DateTime.Now;
-            var f = e.GetType().Assembly.CreateInstance(e.GetType().FullName);
-            //var user = new TPUser()
-            //{
-            //    Account = "Nian.han",
-            //    PassWord = "123456",
-            //    Email = "Nian.han@Advantech.com.cn"
-            //};
-            //using var db = new MyDbContext();
-            //var x = user.GetType();
-            //var res = db.Model.FindEntityType(user.GetType().FullName);
-            //var a = x.Assembly.CreateInstance(x.FullName);
-            //db.SaveChanges();
-            //var a = res.GetForeignKeys();
-            //var b = res.GetKeys();
+            var user = new TPUser();
+            var type = user.GetType();
+            var db = new MyDbContext();
+            var list = db.Find(type,0x01);
         }
         [Test]
         public void Test3()

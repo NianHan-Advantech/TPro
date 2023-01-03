@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System;
+using TPro.Common.Extentions;
+using System.Data;
 
 namespace TPro.EntityFramework
 {
@@ -9,7 +11,7 @@ namespace TPro.EntityFramework
         public List<object> GetBySql(Type entitytype, string sql)
         {
             var connection = base.Database.GetDbConnection();
-            if (connection.State != System.Data.ConnectionState.Open)
+            if (connection.State != ConnectionState.Open)
             {
                 connection.Open();
             }
@@ -21,34 +23,8 @@ namespace TPro.EntityFramework
                 {
                     while (reader.Read())
                     {
-                        try
-                        {
-                            var entity = entitytype.Assembly.CreateInstance(entitytype.FullName);
-                            var properties = entitytype.GetProperties();
-                            foreach (var item in properties)
-                            {
-                                try
-                                {
-                                    var value = reader[item.Name];
-                                    if (item.PropertyType.Name.Contains("String"))
-                                        value = value.ToString();
-                                    item.SetValue(entity, value);
-                                }
-                                catch (Exception ex)
-                                {
-                                    if (ex is ArgumentException)
-                                        continue;
-                                    else if (ex is ArgumentOutOfRangeException)
-                                        continue;
-                                    throw;
-                                }
-                            }
-                            list.Add(entity);
-                        }
-                        catch (Exception)
-                        {
-                            throw;
-                        }
+                        var entity = reader.MapDataToObj(entitytype);
+                        list.Add(entity);
                     }
                 }
                 return list;
