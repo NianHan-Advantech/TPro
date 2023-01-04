@@ -21,11 +21,7 @@ namespace TPro.EntityFramework
                 command.CommandText = sql;
                 using (var reader = command.ExecuteReader())
                 {
-                    while (reader.Read())
-                    {
-                        var entity = reader.MapDataToObj(entitytype);
-                        list.Add(entity);
-                    }
+                    list = reader.ToObjects(entitytype);
                 }
                 return list;
             }

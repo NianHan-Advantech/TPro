@@ -68,19 +68,34 @@
 .table-card {
   height: 100%;
 }
-.table-card .el-card__header .tablecard-header {
+.table-card .el-card__header {
+  padding: 10px;
+}
+.table-card .el-card__header .card-header {
   display: flex;
   height: 60px;
   align-items: center;
   position: relative;
 }
-.table-card .el-card__header .tablecard-header div.header-right {
+.table-card .el-card__header .card-header .el-button {
+  margin: 0 10px;
+}
+.table-card .el-card__header .card-header .el-input {
+  margin: 0 10px;
+  width: 300px;
+}
+.table-card .el-card__header .card-header div.card-header-right {
   position: absolute;
   right: 0;
 }
 .table-card .el-card__body {
-  height: calc(100% - 60px);
+  padding: 10px;
+  height: calc(100% - 80px);
 }
 .table-card .el-card__body div.tablecard-body {
   height: 100%;
+}
+.table-card .el-card__body div.tablecard-body .el-container .el-footer {
+  display: flex;
+  justify-content: center;
 }

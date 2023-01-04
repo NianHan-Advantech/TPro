@@ -101,13 +101,24 @@
     height: 100%;
 
     .el-card__header {
-        .tablecard-header {
+        padding: 10px;
+
+        .card-header {
             display: flex;
             height: 60px;
             align-items: center;
             position: relative;
 
-            div.header-right {
+            .el-button {
+                margin: 0 10px;
+            }
+
+            .el-input {
+                margin: 0 10px;
+                width: 300px;
+            }
+
+            div.card-header-right {
                 position: absolute;
                 right: 0;
             }
@@ -115,12 +126,18 @@
     }
 
     .el-card__body {
-        height: calc(100% - 60px);
-
-
+        padding: 10px;
+        height: calc(100% - 80px);
 
         div.tablecard-body {
             height: 100%;
+
+            .el-container {
+                .el-footer {
+                    display: flex;
+                    justify-content: center;
+                }
+            }
         }
     }
 }

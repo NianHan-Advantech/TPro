@@ -12,18 +12,76 @@
         </el-menu>
     </el-aside>
     <el-main>
-        <el-card>
-            <div slot="header" class="clearfix">
-                <el-button @@click="addentity">添加</el-button>
+        <el-card class="table-card">
+            <div slot="header" class="card-header">
+                <el-button type="primary" @@click="handleAdd">添加</el-button>
+                <el-input v-model="search" placeholder="输入关键字搜索"></el-input>
+                <div class="card-header-right">
+                    <el-button @@click="drawer = true">表头</el-button>
+                </div>
+            </div>
+            <div class="tablecard-body" v-loading="loading">
+                <template>
+                    <el-container style="height:100%;">
+                        <el-main style="height:100%;">
+                            <el-table ref="TableData" :data="TableData" style="width: 100%;" height="100%">
+                                <el-table-column v-for="item,i in TableColumns" :key="i" :prop="item.Name" align="center" :label="item.Name">
+                                </el-table-column>
+                                <el-table-column label="操作">
+                                    <template slot-scope="scope">
+                                        <el-button size="mini"
+                                                   @@click="handleEdit(scope.row)">
+                                            编辑
+                                        </el-button>
+                                        <el-button size="mini"
+                                                   type="danger"
+                                                   @@click="handleDelete(scope.$index, scope.row)">
+                                            删除
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-main>
+                        <el-footer class="elbody-container-footer">
+                            <el-row :gutter="20">
+                                <el-col :span="16">
+                                    <div class="grid-content bg-purple">
+                                        <el-pagination background
+                                                       :current-page="currentPage" :page-sizes="[5,10,15,20]"
+                                                       :page-size="pagesize"
+                                                       layout="total,sizes,prev, pager, next,jumper" :total="Total"
+                                                       style="text-align:center;margin:10px;">
+                                        </el-pagination>
+                                    </div>
+                                </el-col>
+                                <el-col :span="8">
+                                    <div class="grid-content bg-purple">&nbsp;</div>
+                                </el-col>
+                            </el-row>
+
+                        </el-footer>
+                    </el-container>
+                </template>
             </div>
         </el-card>
 
-
-        <el-dialog title="提示"
+        <el-drawer title="列设置"
+                   :visible.sync="drawer">
+            <el-table ref="objectinfo"
+                      :data="objectinfo"
+                      tooltip-effect="dark"
+                      style="width: 100%"
+                      @@selection-change="handleSelectionChange">
+                <el-table-column type="selection" width="55"></el-table-column>
+                <el-table-column prop="Name" label="Name"></el-table-column>
+                <el-table-column prop="Type" label="Type"></el-table-column>
+            </el-table>
+        </el-drawer>
+        <el-dialog :title="dialogtitle"
                    :visible.sync="dialogVisible"
                    width="60%">
             <el-form ref="form" :model="form" label-width="200px">
-                <el-form-item v-for="item,i in objinfo" :key="i" v-show="!item.IsKey" :label="item.IsForiginKey?item.ForiginEntityName:item.Name">
+                <el-form-item v-for="item,i in objectinfo" :key="i" v-show="!item.IsKey" :label="item.IsForiginKey?item.ForiginEntityName:item.Name">
                     <template v-if="item.IsForiginKey">
                         <el-select>
 
@@ -62,23 +120,49 @@
                 return {
                     dialogVisible: false,
                     tableinfos: [],
-                    objinfo: [],
+                    search: '',
+                    loading: false,
+                    currentPage: 1,
+                    pagesize: 10,
                     datalist: [],
+                    objectinfo: [],
+                    drawer: false,
+                    dialogtitle:'',
+                    TableColumns: [
+
+                    ],
                     form: {
 
                     }
                 }
             },
             computed: {
-
+                ProcessedData() {
+                    var arr = this.datalist;
+                    if (this.search.length > 0) {
+                        arr = this.datalist.filter(item => {
+                            return JSON.stringify(item).toLowerCase().includes(this.search.toLowerCase())
+                        })
+                    }
+                    return arr;
+                },
+                Total() {
+                    return this.ProcessedData.length
+                },
+                TableData() {
+                    return this.ProcessedData.slice((this.currentPage - 1) * this.pagesize, this.currentPage * this.pagesize);
+                }
+            },
+            watch: {
+                search() {
+                    this.pagesize = 10;
+                    this.currentPage = 1;
+                }
             },
             mounted() {
                 this.gettablenames();
             },
             methods: {
-                addentity() {
-                    this.dialogVisible = true;
-                },
                 gettabledatas(item) {
                     axios.get(`/admin/DbManage/GetTableDatas?fullname=${item.value}&tablename=${item.label}`)
                         .then((res) => {
@@ -97,7 +181,20 @@
                         }).catch(err => console.error(err))
                         .finally()
                 },
-
+                handleAdd(){
+                    this.dialogtitle="添加"
+                    this.dialogVisible = true;
+                },
+                handleDelete(index,row) {
+                    
+                },
+                handleEdit(row){
+                    this.dialogtitle = "编辑"
+                    this.dialogVisible = true;
+                },
+                handleSelectionChange(val) {
+                    this.TableColumns = val;
+                },
                 isdisabled(item) {
 
                 },
@@ -110,13 +207,13 @@
                         .then((res) => {
                             console.log(res)
                             if (res.data.Code == 200) {
-                                this.objinfo = res.data.Data;
+                                this.objectinfo = res.data.Data;
+                                this.TableColumns = res.data.Data;
                             }
                         }).catch(err => console.error(err))
                         .finally()
 
                 },
-
             }
         }
     </script>

@@ -4,7 +4,6 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TPro.Common.Entity;
 using TPro.Common.Extentions;
 using TPro.Common.Utils;
 using TPro.EntityFramework;
@@ -30,8 +29,7 @@ namespace TPro.UnitTest
         {
             var user = new TPUser();
             var type = user.GetType();
-            var db = new MyDbContext();
-            var list = db.Find(type,0x01);
+            var properties = type.GetProperties();
         }
         [Test]
         public void Test3()
