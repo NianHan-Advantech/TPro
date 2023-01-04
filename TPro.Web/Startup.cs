@@ -1,3 +1,4 @@
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -16,6 +17,7 @@ using TPro.Business.IServiceProvider;
 using TPro.Business.ServiceProvider;
 using TPro.Common.Cache;
 using TPro.Models.AutoMapperConfig;
+using TPro.Web.Configs;
 
 namespace TPro.Web
 {
@@ -36,6 +38,12 @@ namespace TPro.Web
             {
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
             });
+
+            #region Hangfire
+
+            services.AddHangfire(CustomConfigs.HangfireConfig);
+
+            #endregion Hangfire
 
             #region ¿çÓò
 
@@ -136,6 +144,11 @@ namespace TPro.Web
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                //Authorization = new[] { new MyHangfireFilter() }
+            });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -151,6 +164,7 @@ namespace TPro.Web
                     areaName: "Admin",
                     pattern: "admin/{controller=Home}/{action=Index}/{id?}"
                     );
+                endpoints.MapHangfireDashboard();
             });
         }
     }

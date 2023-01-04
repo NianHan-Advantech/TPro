@@ -9,7 +9,7 @@ namespace TPro.Common.AutoMapper
         {
             var mapper = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<TSrc, TDest>().ReverseMap();
+                cfg.CreateMap<TSrc, TDest>();
             }).CreateMapper();
             var res = mapper.Map<TDest>(src);
             return res == null ? new TDest() : res;

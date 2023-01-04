@@ -4,6 +4,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TPro.Common.CustomSql;
 using TPro.Common.Extentions;
 using TPro.Common.Utils;
 using TPro.EntityFramework;
@@ -40,6 +41,11 @@ namespace TPro.UnitTest
             var user = new TPUser();
             var db = new UnitOfWork();
             var list = db.GetBySql(user.GetType(), "SELECT * FROM TPUser");
+        }
+        [Test]
+        public void Test4()
+        {
+            SliteHelper.TestConnect();
         }
     }
 }
