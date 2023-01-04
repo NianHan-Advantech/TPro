@@ -51,7 +51,7 @@ namespace TPro.Web
             {
                 #region ≤‚ ‘øÁ”Ú--‘ –ÌÀ˘”–øÁ”Ú
 
-                options.AddPolicy("CorsSample", p => p.WithOrigins("*").AllowAnyHeader().AllowAnyMethod());
+                options.AddPolicy(CustomConfigs.CorsSampleCorsPolicy, p => p.WithOrigins("*").AllowAnyHeader().AllowAnyMethod());
 
                 #endregion ≤‚ ‘øÁ”Ú--‘ –ÌÀ˘”–øÁ”Ú
             });
@@ -140,7 +140,7 @@ namespace TPro.Web
                 RequestPath = "/staticdir"
             });
             app.UseRouting();
-            app.UseCors("CorsSample");//∆Ù”√øÁ”Ú
+            app.UseCors(CustomConfigs.CorsSampleCorsPolicy);//∆Ù”√øÁ”Ú
             app.UseAuthentication();
             app.UseAuthorization();
 

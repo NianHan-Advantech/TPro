@@ -16,6 +16,12 @@ namespace TPro.Web.Configs
             .UseSQLiteStorage("E:\\MvcTest\\hangfire.db");
         });
 
-        #endregion AutoMapper Config
+        #endregion Hangfire Config
+
+        #region Cors(跨域) Config
+
+        public const string CorsSampleCorsPolicy = "CorsSample";
+
+        #endregion Cors(跨域) Config
     }
 }

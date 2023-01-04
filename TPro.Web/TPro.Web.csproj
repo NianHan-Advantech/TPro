@@ -32,6 +32,7 @@
   <ItemGroup>
     <None Include="Areas\Admin\Views\Shared\Components\Header.cshtml" />
     <None Include="compilerconfig.json" />
+    <None Include="wwwroot\lib\jsonview\dist\jquery.jsonview.js" />
   </ItemGroup>
 
   <ItemGroup>

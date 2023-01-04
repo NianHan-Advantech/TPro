@@ -1,15 +1,18 @@
 @{
     ViewData["Title"] = "Privacy Policy";
 }
+@section Styles{
+    <link rel="stylesheet" href="/lib/jsonview/dist/jquery.jsonview.css" />
+}
 
-
-<div class="text-center">
-    <el-tree :data="data" :props="treeProps" default-expand-all></el-tree>
+<div  id="jsonbox">
+    @*<el-tree :data="data" :props="treeProps" default-expand-all></el-tree>*@
 </div>
 
 
 
 @section Scripts{
+    <script src="~/lib/jsonview/dist/jquery.jsonview.js"></script>
     <script>
         var mixin = {
             data() {
@@ -19,15 +22,50 @@
                         label: (data, node) => { return data.label + ':' + data.value }
                     },
                     data: [],
+                    objdata: {
+                        Code: 200,
+                        Result: "Success",
+                        Data: [
+                            { RequestId: 73, ModelName: "EKI-7428G", LabelKind: "ProductLabel", Status: 212 },
+                            { RequestId: 74, ModelName: "EKI-7428G", LabelKind: "ProductLabel", Status: 212 },
+                            { RequestId: 75, ModelName: "EKI-7428G", LabelKind: "ProductLabel", Status: 212 },
+                            { RequestId: 76, ModelName: "EKI-7428G", LabelKind: "ProductLabel", Status: 212 },
+                            { RequestId: 77, ModelName: "EKI-7428G", LabelKind: "ProductLabel", Status: 212 },
+                        ]
+                    },
+                    arrdata: [
+                        { RequestId: 73, ModelName: "EKI-7428G", LabelKind: "ProductLabel", Status: 212 },
+                        { RequestId: 74, ModelName: "EKI-7428G", LabelKind: "ProductLabel", Status: 212 },
+                        { RequestId: 75, ModelName: "EKI-7428G", LabelKind: "ProductLabel", Status: 212 },
+                        { RequestId: 76, ModelName: "EKI-7428G", LabelKind: "ProductLabel", Status: 212 },
+                        { RequestId: 77, ModelName: "EKI-7428G", LabelKind: "ProductLabel", Status: 212 },
+                    ],
+                    arr2:[
+                        1,2,3,4,5
+                    ]
                 }
             },
             computed: {
 
             },
             mounted() {
-                this.jsondelf()
+                var json = JSON.stringify(this.objdata)
+                $("#jsonbox").JSONView(json);
             },
             methods: {
+                handleobj(obj) {
+                    let type = typeof (obj)
+                    switch (type) {
+                        case "object":
+                            if (Array.isArray(obj)) {
+                            } else {
+                            }
+                            value = children.length
+                            break;
+                        default:
+                            break;
+                    }
+                },
                 jsondelf() {
                     var jt = '{"Code":200,"Result":"Success","Data":[{"RequestId":742,"ModelName":"EKI - 7428G","LabelKind":"ProductLabel","Status":212,"UserEmail":"Jerry.Tsai@advantech.com.tw","SinceLastDay":7},{"RequestId":744,"ModelName":"EKI - 7706G","LabelKind":"ProductLabel","Status":212,"UserEmail":"Jerry.Tsai@advantech.com.tw","SinceLastDay":7},{"RequestId":787,"ModelName":"EKI - 2525I - LA","LabelKind":"ProductLabel","Status":3,"UserEmail":"Jerry.Tsai@advantech.com.tw","SinceLastDay":7},{"RequestId":818,"ModelName":"AIMC - 3403","LabelKind":"ProductLabel","Status":104,"UserEmail":"Miranda.Hsieh@advantech.com.tw","SinceLastDay":21}]}'
                     var obj = JSON.parse(jt)
@@ -107,7 +145,7 @@
                         let type = typeof (e)
                         switch (type) {
                             case "object":
-                                if (Array.isArray(e) {
+                                if (Array.isArray(e)) {
                                     children = this.countarr(e)
                                 } else {
                                     children = this.countobj(e)
@@ -127,15 +165,15 @@
                     })
                 },
                 formatobj(obj) {
-                    if (Array.isArray(obj)) {
+                    //if (Array.isArray(obj)) {
 
-                    } else {
-                        let label = typeof (obj)
-                        let item = {
-                            label,
+                    //} else {
+                    //    let label = typeof (obj)
+                    //    let item = {
+                    //        label,
 
-                        }
-                    }
+                    //    }
+                    //}
                 },
                 formatjson(json = "") {
                     try {
