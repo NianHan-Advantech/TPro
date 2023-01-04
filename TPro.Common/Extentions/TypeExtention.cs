@@ -16,7 +16,7 @@ namespace TPro.Common.Extentions
             }
             else
             {
-                return type.Assembly.CreateInstance(type.FullName) ?? "";
+                return Activator.CreateInstance(type) ?? "";
             }
         }
     }
