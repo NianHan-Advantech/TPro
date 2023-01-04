@@ -22,7 +22,10 @@ namespace TPro.UnitTest
         [Test]
         public void Test1()
         {
-
+            string a = "";
+            //int a = 0;
+            char b= 'A';
+            var res = Activator.CreateInstance(a.GetType());
         }
         [Test]
         public void Test2()
