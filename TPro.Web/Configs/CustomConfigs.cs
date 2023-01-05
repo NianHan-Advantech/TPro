@@ -9,7 +9,10 @@ namespace TPro.Web.Configs
     {
         #region Log Config
 
-        public static CustomLogProvider logProvider = new CustomLogProvider();
+        public static CustomLogProvider logProvider = new CustomLogProvider(option =>
+        {
+            option.Storage.UseSqliteStorage("Data Source=E:\\MvcTest\\templatedb.db;");
+        });
         #endregion
 
         #region Hangfire Config

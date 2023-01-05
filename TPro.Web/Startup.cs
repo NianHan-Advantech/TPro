@@ -42,6 +42,7 @@ namespace TPro.Web
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
             });
 
+
             #region Hangfire
 
             services.AddHangfire(CustomConfigs.HangfireConfig);
@@ -111,7 +112,7 @@ namespace TPro.Web
             #endregion AutoMapper
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -134,8 +135,8 @@ namespace TPro.Web
             });
 
             #endregion SwaggerUI
-
-            //loggerFactory.AddProvider(CustomConfigs.logProvider);
+            
+            loggerFactory.AddProvider(CustomConfigs.logProvider);
             app.Use((context, next) =>
             {
                 context.Request.EnableBuffering();
