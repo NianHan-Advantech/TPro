@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace TPro.Common.Extentions
 {
+
     public static class DbDataReaderExtention
     {
         public static T MapDataToObj<T>(this DbDataReader dataReader) where T : class, new()

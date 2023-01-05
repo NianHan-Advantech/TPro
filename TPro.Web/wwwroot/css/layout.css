@@ -10,6 +10,7 @@ p {
   margin: 0;
 }
 .dashboard {
+  font-family: "Microsoft JhengHei", Roboto, "Helvetica Neue", Arial, sans-serif;
   background-color: #ffffff;
   width: 100%;
   height: calc(100vh - 60px);
@@ -82,6 +83,8 @@ p {
 .dashboard .dashboard-title .title-item .title-item-header {
   text-align: center;
   background: #e6e6e6;
+  font-size: 1vw;
+  font-weight: bold;
 }
 .dashboard .dashboard-title .title-item .title-item-body {
   display: flex;

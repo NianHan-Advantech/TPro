@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
@@ -16,6 +18,7 @@ using TPro.Business.Admin.ServiceProvider;
 using TPro.Business.IServiceProvider;
 using TPro.Business.ServiceProvider;
 using TPro.Common.Cache;
+using TPro.Common.CustomLog;
 using TPro.Models.AutoMapperConfig;
 using TPro.Web.Configs;
 
@@ -132,6 +135,12 @@ namespace TPro.Web
 
             #endregion SwaggerUI
 
+            //loggerFactory.AddProvider(CustomConfigs.logProvider);
+            app.Use((context, next) =>
+            {
+                context.Request.EnableBuffering();
+                return next();
+            });
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()
@@ -139,6 +148,7 @@ namespace TPro.Web
                 FileProvider = new PhysicalFileProvider("F:\\staticdir"),
                 RequestPath = "/staticdir"
             });
+ 
             app.UseRouting();
             app.UseCors(CustomConfigs.CorsSampleCorsPolicy);//∆Ù”√øÁ”Ú
             app.UseAuthentication();

@@ -6,6 +6,7 @@ namespace TPro.Web.Controllers
 {
     [Route("[controller]/[action]")]
     [Authorize]
+    [RequestLogFilter]
     [TypeFilter(typeof(CustomAuthorizeFilter))]
     public class BaseController : Controller
     {
@@ -28,7 +29,7 @@ namespace TPro.Web.Controllers
         [HttpGet]
         public IActionResult ErrorPage()
         {
-            
+
             return View();
         }
     }

@@ -4,13 +4,11 @@ using TPro.EntityFramework.Entity;
 
 namespace TPro.EntityFramework.EFConfig
 {
-
-    public class MenuConfig : IEntityTypeConfiguration<Menu>
+    public class ReqLogConfig : IEntityTypeConfiguration<ReqLog>
     {
-        public void Configure(EntityTypeBuilder<Menu> builder)
+        public void Configure(EntityTypeBuilder<ReqLog> builder)
         {
             builder.HasKey(e => e.Id);
-            builder.HasOne(e => e.Parent).WithMany(e => e.Children).HasForeignKey(e => e.ParentId);
         }
     }
 }

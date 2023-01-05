@@ -40,6 +40,7 @@ namespace TPro.EntityFramework
             modelBuilder.ApplyConfiguration(new EFConfig.TPUserConfig());
             modelBuilder.ApplyConfiguration(new EFConfig.UserRoleConfig());
             modelBuilder.ApplyConfiguration(new EFConfig.MenuConfig());
+            modelBuilder.ApplyConfiguration(new EFConfig.ReqLogConfig());
         }
 
         public DbSet<Jurisdiction> Jurisdiction { get; set; }
@@ -48,5 +49,6 @@ namespace TPro.EntityFramework
         public DbSet<TPUser> TPUser { get; set; }
         public DbSet<UserRole> UserRole { get; set; }
         public DbSet<Menu> Menu { get; set; }
+        public DbSet<ReqLog> ReqLog { get; set; }
     }
 }

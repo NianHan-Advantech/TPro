@@ -1,11 +1,17 @@
 ﻿using Hangfire;
 using Hangfire.Storage.SQLite;
 using System;
+using TPro.Common.CustomLog;
 
 namespace TPro.Web.Configs
 {
     public static class CustomConfigs
     {
+        #region Log Config
+
+        public static CustomLogProvider logProvider = new CustomLogProvider();
+        #endregion
+
         #region Hangfire Config
 
         public static Action<IGlobalConfiguration> HangfireConfig = new Action<IGlobalConfiguration>(config =>
