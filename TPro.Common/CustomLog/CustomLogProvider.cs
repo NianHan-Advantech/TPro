@@ -52,7 +52,7 @@ namespace TPro.Common.CustomLog
                 LogLevel = logLevel.ToString(),
                 EventId = eventId.ToString(),
                 State = state.ToString(),
-                Exception = exception.ToString(),
+                Exception = exception?.ToString()??"",
             };
             _option.Storage.WriteFunc(logEntity);
         }
@@ -112,15 +112,15 @@ namespace TPro.Common.CustomLog
             using (var connection = new SqliteConnection(optioin.DbConnectionString))
             {
                 connection.Open();
-                string isexistsql = $"SELECT count(*) FROM sqlite_master WHERE type='table' AND name = '{optioin.DbName}';";
+                string isexistsql = $"SELECT count(*) FROM sqlite_master WHERE type='table' AND name = '{optioin.DbName}'";
                 var command = new SqliteCommand(isexistsql, connection);
                 var count = command.ExecuteNonQuery();
-                //if (count != 1)
-                //{
-                //    string createsql = $"create table {optioin.DbName} (Id INTEGER Primary Key, LogLevel TEXT,EventId TEXT,State TEXT,Exception TEXT,AppendText TEXT)";
-                //    command.CommandText = createsql;
-                //    command.ExecuteNonQuery();
-                //}
+                if (count != 1)
+                {
+                    string createsql = $"create table {optioin.DbName} (Id INTEGER Primary Key, LogLevel TEXT,EventId TEXT,State TEXT,Exception TEXT,AppendText TEXT)";
+                    command.CommandText = createsql;
+                    command.ExecuteNonQuery();
+                }
                 command.CommandText = $"insert into {optioin.DbName} (LogLevel,EventId,State,Exception,AppendText) Values('{logEntity.LogLevel}','{logEntity.EventId}','{logEntity.State}','{logEntity.Exception}','{logEntity.AppendText}')";
                 var i = command.ExecuteNonQuery();
                 return i;

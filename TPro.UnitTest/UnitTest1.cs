@@ -25,7 +25,7 @@ namespace TPro.UnitTest
         {
             string a = "";
             //int a = 0;
-            char b= 'A';
+            char b = 'A';
             var res = Activator.CreateInstance(a.GetType());
         }
         [Test]
@@ -45,7 +45,8 @@ namespace TPro.UnitTest
         [Test]
         public void Test4()
         {
-            SliteHelper.TestConnect();
+            var a = DateTime.Parse("2022-1");
+            var d = Convert.ToDateTime("2022-1");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Hangfire;
 using Hangfire.Storage.SQLite;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using System;
 using TPro.Common.CustomLog;
 
@@ -13,7 +14,8 @@ namespace TPro.Web.Configs
         {
             option.Storage.UseSqliteStorage("Data Source=E:\\MvcTest\\templatedb.db;");
         });
-        #endregion
+
+        #endregion Log Config
 
         #region Hangfire Config
 
@@ -30,6 +32,11 @@ namespace TPro.Web.Configs
         #region Cors(跨域) Config
 
         public const string CorsSampleCorsPolicy = "CorsSample";
+
+        public static Action<CorsPolicyBuilder> CorsConfig = new Action<CorsPolicyBuilder>(config =>
+        {
+            config.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+        });
 
         #endregion Cors(跨域) Config
     }
