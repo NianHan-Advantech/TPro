@@ -3,7 +3,7 @@ using System;
 
 namespace TPro.Common.NianLog
 {
-    public class NianLogConfiguration
+    public sealed class NianLogConfiguration
     {
         public NianLogConfiguration()
         {

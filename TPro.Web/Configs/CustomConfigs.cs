@@ -2,7 +2,7 @@
 using Hangfire.Storage.SQLite;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using System;
-using TPro.Common.CustomLog;
+using TPro.Common.NianLog;
 
 namespace TPro.Web.Configs
 {
@@ -10,9 +10,9 @@ namespace TPro.Web.Configs
     {
         #region Log Config
 
-        public static CustomLogProvider logProvider = new CustomLogProvider(option =>
+        public static NianLogProvider logProvider = new NianLogProvider(option =>
         {
-            option.Storage.UseSqliteStorage("Data Source=E:\\MvcTest\\templatedb.db;");
+            option.UseSqliteStorage("Data Source=E:\\MvcTest\\templatedb.db;");
         });
 
         #endregion Log Config

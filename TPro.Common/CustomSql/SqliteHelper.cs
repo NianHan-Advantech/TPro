@@ -12,8 +12,6 @@ namespace TPro.Common.CustomSql
 {
     public class SQLiteHelper
     {
-        private object queryLockObj = new object();
-        private object querySqlLockObj = new object();
         private static object syncObj = new object();
         private static SQLiteHelper instance = null;
         public static SQLiteHelper GetInstance()
@@ -41,25 +39,6 @@ namespace TPro.Common.CustomSql
             sqliteConn = new SqliteConnection("data source=" + System.AppDomain.CurrentDomain.BaseDirectory + "MinData.db");
         }
 
-        /// <summary>
-        /// 创建数据库
-        /// </summary>
-        /// <param name="DbFilePath"></param>
-        //public bool CreateDataBaseFile()
-        //{
-        //    try
-        //    {
-        //        if (!File.Exists(dbPath))
-        //        {
-        //            SqliteConnection.CreateFile(dbPath);
-        //        }
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("新建数据库文件" + dbPath + "失败：" + ex.Message);
-        //    }
-        //}
         /// <summary>
         /// 判断表是否存在
         /// </summary>
@@ -140,15 +119,15 @@ namespace TPro.Common.CustomSql
         public List<string> GetColumns<T>(T model) where T : class
         {
             List<string> Columns = new List<string>();
-            System.Reflection.PropertyInfo[] properties = model.GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            var properties = model.GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             if (properties.Length <= 0)
             {
                 throw new Exception("类属性长度为零");
             }
-            foreach (System.Reflection.PropertyInfo item in properties)
+            foreach (var item in properties)
             {
                 string Name = "";
-                if (item.Name != "ID")
+                if (item.Name.ToLower() != "id")
                 {
                     if (item.PropertyType.ToString().Contains("Time") || item.PropertyType.ToString().Contains("String"))
                     {
@@ -163,24 +142,6 @@ namespace TPro.Common.CustomSql
                 {
                     Name = item.Name + "  integer PRIMARY KEY autoincrement";
                 }
-                Columns.Add(Name);
-            }
-            return Columns;
-        }
-        /// <summary>
-        /// 获取类的属性名称和类型
-        /// </summary>
-        /// <typeparam name="T">类</typeparam>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public List<string> GetColumns(List<string> cols)
-        {
-            List<string> Columns = new List<string>();
-            Columns.Add("ID  integer PRIMARY KEY autoincrement");
-            Columns.Add("Time  varchar(100) default NULL");
-            foreach (string item in cols)
-            {
-                string Name = item + " decimal(10, 4) default NULL";
                 Columns.Add(Name);
             }
             return Columns;

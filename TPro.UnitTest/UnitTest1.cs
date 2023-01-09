@@ -1,13 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using TPro.Common.CustomSql;
-using TPro.Common.Extentions;
-using TPro.Common.Utils;
-using TPro.EntityFramework;
+using System.Globalization;
+using TPro.Common.CustomSql.SystemSql;
+using TPro.Common.NianLog;
 using TPro.EntityFramework.DbProvider;
 using TPro.EntityFramework.Entity;
 
@@ -23,11 +18,11 @@ namespace TPro.UnitTest
         [Test]
         public void Test1()
         {
-            string a = "";
-            //int a = 0;
-            char b = 'A';
-            var res = Activator.CreateInstance(a.GetType());
+            var sqlhelper = new SQLiteHelper("Data Source=E:\\MvcTest\\templatedb.db;");
+            var entity = new NianLogEntity();
+            var res = sqlhelper.GetColumns(entity);
         }
+
         [Test]
         public void Test2()
         {
@@ -35,13 +30,14 @@ namespace TPro.UnitTest
             var type = user.GetType();
             var properties = type.GetProperties();
         }
+
         [Test]
         public void Test3()
         {
-            var user = new TPUser();
-            var db = new UnitOfWork();
-            var list = db.GetBySql(user.GetType(), "SELECT * FROM TPUser");
+            var t=DateTime.Now;
+            var r=t.ToString("MMM",CultureInfo.CreateSpecificCulture("en-GB"));
         }
+
         [Test]
         public void Test4()
         {
