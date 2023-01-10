@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
@@ -10,18 +11,21 @@ namespace TPro.Common.CustomSql.SystemSql
 {
     public class SQLiteHelper : IDisposable
     {
-        private readonly string _connectionstring;
         private readonly SQLiteConnection _connection;
 
         public SQLiteHelper(string connectstring)
         {
-            _connectionstring = connectstring;
             _connection = new SQLiteConnection(connectstring);
         }
 
         public SQLiteHelper(SQLiteConnection connection)
         {
             _connection = connection;
+        }
+
+        public SQLiteHelper(IOptions<SQLiteConnection> options)
+        {
+            _connection = options.Value;
         }
 
         /// <summary>
@@ -181,15 +185,14 @@ namespace TPro.Common.CustomSql.SystemSql
 
         public SQLiteDataReader ExecuteReader(string sql, params SQLiteParameter[] parameters)
         {
-            var connection = new SQLiteConnection(_connectionstring);
-            var command = new SQLiteCommand(sql, connection);
+            if (_connection.State != ConnectionState.Open) _connection.Open();
+            var command = new SQLiteCommand(sql, _connection);
             try
             {
                 if (parameters.Length != 0)
                 {
                     command.Parameters.AddRange(parameters);
                 }
-                connection.Open();
                 return command.ExecuteReader(CommandBehavior.CloseConnection);
             }
             catch (Exception) { throw; }
@@ -197,24 +200,25 @@ namespace TPro.Common.CustomSql.SystemSql
 
         public List<T> ExecuteQueryEntity<T>(string sql, params SQLiteParameter[] parameters) where T : class, new()
         {
-            using (var connection = new SQLiteConnection(_connectionstring))
+            if (_connection.State != ConnectionState.Open) _connection.Open();
+
+            using (var command = new SQLiteCommand(sql, _connection))
             {
-                using (var command = new SQLiteCommand(sql, connection))
+                try
                 {
-                    try
+                    if (parameters.Length != 0)
                     {
-                        if (parameters.Length != 0)
-                        {
-                            command.Parameters.AddRange(parameters);
-                        }
-                        connection.Open();
-                        return command.ExecuteReader(CommandBehavior.CloseConnection).MapToTEntities<T>();
+                        command.Parameters.AddRange(parameters);
                     }
-                    catch (Exception) { throw; }
+                    return command.ExecuteReader(CommandBehavior.CloseConnection).MapToTEntities<T>();
                 }
+                catch (Exception) { throw; }
             }
         }
-
+        public void Close()
+        {
+            _connection.Close();
+        }
         public void Dispose()
         {
             _connection.Close();
