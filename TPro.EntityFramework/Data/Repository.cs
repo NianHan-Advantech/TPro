@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using TPro.EntityFramework.DbProvider;
 
-namespace TPro.EntityFramework
+namespace TPro.EntityFramework.Data
 {
     public class Repository<T> : IRepository where T : class, new()
     {
@@ -33,7 +33,7 @@ namespace TPro.EntityFramework
         /// </summary>
         internal IUnitOfWork UnitOfWork
         {
-            get { return this._unitOfWork; }
+            get { return _unitOfWork; }
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace TPro.EntityFramework
         /// <param name="entity">要添加的实体对象</param>
         public void Add(T entity)
         {
-            this.GetSet().Add(entity);
+            GetSet().Add(entity);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace TPro.EntityFramework
         /// <param name="entity">要修改的实体对象</param>
         public void Modify(T entity)
         {
-            this._unitOfWork.SetModified(entity);
+            _unitOfWork.SetModified(entity);
         }
 
         /// <summary>
@@ -61,10 +61,10 @@ namespace TPro.EntityFramework
         public void Remove(T entity)
         {
             // Attach 实例（如果 DbContext 没有跟踪实例的话）
-            this._unitOfWork.Attach(entity);
+            _unitOfWork.Attach(entity);
 
             // removed
-            this.GetSet().Remove(entity);
+            GetSet().Remove(entity);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace TPro.EntityFramework
         /// <returns></returns>
         public bool Commit()
         {
-            return this._unitOfWork.Commit() > 0;
+            return _unitOfWork.Commit() > 0;
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace TPro.EntityFramework
         /// <returns>所有的实体</returns>
         public IQueryable<T> GetAll()
         {
-            return this.GetSet();
+            return GetSet();
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace TPro.EntityFramework
         /// <returns></returns>
         public T GetBy(Expression<Func<T, bool>> filter)
         {
-            return this.GetSet().FirstOrDefault(filter);
+            return GetSet().FirstOrDefault(filter);
         }
 
         /// <summary>
@@ -135,12 +135,12 @@ namespace TPro.EntityFramework
         /// <returns></returns>
         internal IQueryable<T> GetFiltered(Expression<Func<T, bool>> filter)
         {
-            return this.GetSet().Where(filter);
+            return GetSet().Where(filter);
         }
 
         public List<T> GetEntitiesBy(Expression<Func<T, bool>> expression)
         {
-            return this.GetSet().Where(expression).ToList();
+            return GetSet().Where(expression).ToList();
         }
 
         public List<string> GetAllTableNames()
@@ -152,7 +152,7 @@ namespace TPro.EntityFramework
 
         private DbSet<T> GetSet()
         {
-            return this._unitOfWork.CreateSet<T>();
+            return _unitOfWork.CreateSet<T>();
         }
 
         private bool disposedValue = false; // 要检测冗余调用
@@ -163,7 +163,7 @@ namespace TPro.EntityFramework
             {
                 if (disposing)
                 {
-                    this._unitOfWork.Dispose();
+                    _unitOfWork.Dispose();
                 }
                 disposedValue = true;
             }

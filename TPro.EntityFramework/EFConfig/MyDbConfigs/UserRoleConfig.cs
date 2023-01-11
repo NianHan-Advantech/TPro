@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TPro.EntityFramework.Entity;
+using TPro.EntityFramework.Entity.MyDbEntity;
 
-namespace TPro.EntityFramework.EFConfig
+namespace TPro.EntityFramework.EFConfig.MyDbConfigs
 {
-    public class UserRoleConfig : IEntityTypeConfiguration<Entity.UserRole>
+    public class UserRoleConfig : IEntityTypeConfiguration<UserRole>
     {
         public void Configure(EntityTypeBuilder<UserRole> builder)
         {

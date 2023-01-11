@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using TPro.Business.IServiceProvider;
-using TPro.EntityFramework.Entity;
+using TPro.EntityFramework.Entity.MyDbEntity;
 
 namespace TPro.Web.Filters
 {

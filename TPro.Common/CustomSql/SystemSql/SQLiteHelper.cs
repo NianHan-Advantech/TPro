@@ -75,6 +75,11 @@ namespace TPro.Common.CustomSql.SystemSql
             var sql = " CREATE TABLE " + table + "(" + Column + ")";
             ExecuteNonQuery(sql);
         }
+        public void CreateTable<T>(string table, T entity) where T : class
+        {
+            var columns = GetColumns(entity);
+            CreateTable(table, columns);
+        }
 
         /// <summary>
         /// 获取类的属性名称和类型

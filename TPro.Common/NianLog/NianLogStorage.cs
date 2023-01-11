@@ -13,7 +13,7 @@ namespace TPro.Common.NianLog
 
     public static class NianLogSqliteStorageExtention
     {
-        private static NianLogSqliteOption _option;
+        private static NianLogSqliteOption _option = new();
 
         public static void UseSqliteStorage(this NianLogConfiguration configuration, string connectionstring)
         {
@@ -33,8 +33,16 @@ namespace TPro.Common.NianLog
             {
                 using (var sqlitehelper = new SQLiteHelper(_option.ConnectionString))
                 {
-                    sqlitehelper.TableExist(_option.TableName);
-                    sqlitehelper.Add(_option.TableName, entity);
+                    var isexist = sqlitehelper.TableExist(_option.TableName);
+                    if (isexist)
+                    {
+                        sqlitehelper.Add(_option.TableName, entity);
+                    }
+                    else if (!isexist && _option.IsAutoCreateTable)
+                    {
+                        sqlitehelper.CreateTable(_option.TableName, entity);
+                        sqlitehelper.Add(_option.TableName, entity);
+                    }
                 }
             }
         }

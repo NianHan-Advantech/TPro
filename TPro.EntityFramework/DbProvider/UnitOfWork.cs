@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TPro.Common.Extentions;
+using TPro.EntityFramework.DbContexts;
 
 namespace TPro.EntityFramework.DbProvider
 {
@@ -19,7 +19,6 @@ namespace TPro.EntityFramework.DbProvider
         {
             _context = new MyDbContext(dbType);
         }
-
 
         public bool Committed { get; private set; }
 
@@ -110,7 +109,7 @@ namespace TPro.EntityFramework.DbProvider
                                 try
                                 {
                                     var value = reader[item.Name];
-                                    if(item.PropertyType.Name.Contains("String"))
+                                    if (item.PropertyType.Name.Contains("String"))
                                         value = value.ToString();
                                     item.SetValue(entity, value);
                                 }

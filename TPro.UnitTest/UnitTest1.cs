@@ -1,13 +1,10 @@
 using NUnit.Framework;
 using System;
 using System.Globalization;
-using System.Threading.Tasks;
-using System.Timers;
 using TPro.Common.CustomSql.SystemSql;
 using TPro.Common.NianLog;
 using TPro.Common.NSpider;
-using TPro.EntityFramework.DbProvider;
-using TPro.EntityFramework.Entity;
+using TPro.EntityFramework.Entity.MyDbEntity;
 
 namespace TPro.UnitTest
 {
@@ -47,12 +44,12 @@ namespace TPro.UnitTest
             var a = DateTime.Parse("2022-1");
             var d = Convert.ToDateTime("2022-1");
         }
+
         [Test]
         public void Test5()
         {
             var option = new NSpiderOption();
             option.TimeInterval = 999;
-
         }
     }
 }

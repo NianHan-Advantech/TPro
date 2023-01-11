@@ -4,6 +4,7 @@ using System.Linq;
 using TPro.Business.Admin.IServiceProvider;
 using TPro.Common.Extentions;
 using TPro.EntityFramework;
+using TPro.EntityFramework.DbContexts;
 using TPro.Models.Others;
 using TPro.Models.ResponseDtos;
 
@@ -61,7 +62,7 @@ namespace TPro.Business.Admin.ServiceProvider
 
         public ResponseModel SaveEntityInfo()
         {
-            using var userhelper = new EntityFramework.Data.TPUserData();
+            using var userhelper = new EntityFramework.Data.MyDbData.TPUserData();
             var res = userhelper.GetBy(e => e.Id > 0);
             var rl = res.GetFieldProperties();
             return Success(rl);

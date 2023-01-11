@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TPro.EntityFramework.Entity;
+using TPro.EntityFramework.Entity.MyDbEntity;
 using TPro.Models.AuthDtos;
 using TPro.Models.ResponseDtos;
 

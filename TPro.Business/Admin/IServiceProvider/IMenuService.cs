@@ -1,4 +1,4 @@
-﻿using TPro.EntityFramework.Entity;
+﻿using TPro.EntityFramework.Entity.MyDbEntity;
 using TPro.Models.ResponseDtos;
 
 namespace TPro.Business.Admin.IServiceProvider

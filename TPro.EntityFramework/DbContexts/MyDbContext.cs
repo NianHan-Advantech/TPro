@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TPro.EntityFramework.Entity;
+using TPro.EntityFramework.Entity.MyDbEntity;
 
-namespace TPro.EntityFramework
+namespace TPro.EntityFramework.DbContexts
 {
     public class MyDbContext : BaseDbContext
     {
@@ -34,13 +34,13 @@ namespace TPro.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new EFConfig.JurisdictionConfig());
-            modelBuilder.ApplyConfiguration(new EFConfig.RoutePathConfig());
-            modelBuilder.ApplyConfiguration(new EFConfig.TPRoleConfig());
-            modelBuilder.ApplyConfiguration(new EFConfig.TPUserConfig());
-            modelBuilder.ApplyConfiguration(new EFConfig.UserRoleConfig());
-            modelBuilder.ApplyConfiguration(new EFConfig.MenuConfig());
-            modelBuilder.ApplyConfiguration(new EFConfig.ReqLogConfig());
+            modelBuilder.ApplyConfiguration(new EFConfig.MyDbConfigs.JurisdictionConfig());
+            modelBuilder.ApplyConfiguration(new EFConfig.MyDbConfigs.RoutePathConfig());
+            modelBuilder.ApplyConfiguration(new EFConfig.MyDbConfigs.TPRoleConfig());
+            modelBuilder.ApplyConfiguration(new EFConfig.MyDbConfigs.TPUserConfig());
+            modelBuilder.ApplyConfiguration(new EFConfig.MyDbConfigs.UserRoleConfig());
+            modelBuilder.ApplyConfiguration(new EFConfig.MyDbConfigs.MenuConfig());
+            modelBuilder.ApplyConfiguration(new EFConfig.MyDbConfigs.ReqLogConfig());
         }
 
         public DbSet<Jurisdiction> Jurisdiction { get; set; }
@@ -50,5 +50,29 @@ namespace TPro.EntityFramework
         public DbSet<UserRole> UserRole { get; set; }
         public DbSet<Menu> Menu { get; set; }
         public DbSet<ReqLog> ReqLog { get; set; }
+    }
+
+    public class NovelLibraryDbContext : BaseDbContext
+    {
+        private readonly string _DbConnectStr;
+
+        public NovelLibraryDbContext()
+        {
+            _DbConnectStr = "Data Source=E:\\MvcTest\\novellibrary.db;";
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlite(_DbConnectStr);
+            }
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+        }
+
     }
 }

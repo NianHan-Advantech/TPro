@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TPro.EntityFramework.Entity
+namespace TPro.EntityFramework.Entity.MyDbEntity
 {
     public class UserRole
     {

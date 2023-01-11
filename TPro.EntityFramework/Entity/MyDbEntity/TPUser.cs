@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace TPro.EntityFramework.Entity
+namespace TPro.EntityFramework.Entity.MyDbEntity
 {
     public class TPUser
     {

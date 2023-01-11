@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TPro.Business.Admin.IServiceProvider;
-using TPro.EntityFramework.Entity;
+using TPro.EntityFramework.Entity.MyDbEntity;
 
 namespace TPro.Web.Areas.Admin.Controllers
 {

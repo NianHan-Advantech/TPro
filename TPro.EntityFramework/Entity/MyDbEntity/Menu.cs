@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TPro.EntityFramework.Entity
+namespace TPro.EntityFramework.Entity.MyDbEntity
 {
     public class Menu
     {

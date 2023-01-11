@@ -1,21 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using TPro.Common.Extentions;
 using TPro.Common.Utils;
-using TPro.EntityFramework;
-using TPro.EntityFramework.Entity;
+using TPro.EntityFramework.DbContexts;
+using TPro.EntityFramework.Entity.MyDbEntity;
 
 namespace TPro.Web.Filters
 {
     public class RequestLogFilter : Attribute, IActionFilter
     {
-
         public void OnActionExecuted(ActionExecutedContext context)
         {
             var req = context.HttpContext.Request;
@@ -32,9 +26,9 @@ namespace TPro.Web.Filters
             }
             var rlog = new ReqLog()
             {
-                HandleTime= DateTime.Now,
-                ReqStr=reqstr,
-                UserInfo=uemail
+                HandleTime = DateTime.Now,
+                ReqStr = reqstr,
+                UserInfo = uemail
             };
             var db = new MyDbContext();
             db.ReqLog.Add(rlog);

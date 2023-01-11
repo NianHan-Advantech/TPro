@@ -4,7 +4,7 @@ using System;
 using TPro.Common.Extentions;
 using System.Data;
 
-namespace TPro.EntityFramework
+namespace TPro.EntityFramework.DbContexts
 {
     public class BaseDbContext : DbContext
     {

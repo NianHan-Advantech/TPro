@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using TPro.Business.Admin.IServiceProvider;
-using TPro.EntityFramework.Entity;
+using TPro.EntityFramework.Entity.MyDbEntity;
 using TPro.Models.ResponseDtos;
 
 namespace TPro.Business.Admin.ServiceProvider
@@ -11,7 +11,7 @@ namespace TPro.Business.Admin.ServiceProvider
 
         public ResponseModel GetJurisdictions()
         {
-            var helper = new EntityFramework.Data.JurisdictionData();
+            var helper = new EntityFramework.Data.MyDbData.JurisdictionData();
             var rlist = helper.GetAll().ToList();
             return rlist.Any() ? Success(rlist) : Fail();
         }
@@ -26,7 +26,7 @@ namespace TPro.Business.Admin.ServiceProvider
 
         public ResponseModel GetRoutePaths()
         {
-            var helper = new EntityFramework.Data.RoutePathData();
+            var helper = new EntityFramework.Data.MyDbData.RoutePathData();
             var rlist = helper.GetAll().ToList();
             return rlist.Any() ? Success(rlist) : Fail();
         }
@@ -37,7 +37,7 @@ namespace TPro.Business.Admin.ServiceProvider
 
         public ResponseModel GetUsers()
         {
-            var helper = new EntityFramework.Data.TPUserData();
+            var helper = new EntityFramework.Data.MyDbData.TPUserData();
             var rlist = helper.GetAll().ToList();
             return rlist.Any() ? Success(rlist) : Fail();
         }
@@ -48,7 +48,7 @@ namespace TPro.Business.Admin.ServiceProvider
 
         public ResponseModel GetRoles()
         {
-            var helper = new EntityFramework.Data.TPRoleData();
+            var helper = new EntityFramework.Data.MyDbData.TPRoleData();
             var rlist = helper.GetAll().ToList();
             return rlist.Any() ? Success(rlist) : Fail();
         }

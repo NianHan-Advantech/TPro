@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TPro.Business.IServiceProvider;
-using TPro.EntityFramework.Entity;
+using TPro.EntityFramework.Entity.MyDbEntity;
 using TPro.Models.AuthDtos;
 using TPro.Web.Filters;
 

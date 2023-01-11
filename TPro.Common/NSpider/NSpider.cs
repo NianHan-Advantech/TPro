@@ -9,14 +9,13 @@ using System.Timers;
 
 namespace TPro.Common.NSpider
 {
-    public class NSpider
+    public class NSpider : INSpider
     {
         private readonly NSpiderOption _option;
         private readonly HttpClient _client;
         private readonly Timer _spiderpool;
-        private string _currentUrl;
+        private string _currentUrl { get; set; }
         private List<string> _urlpool { get; set; } = new List<string>();
-
 
         public NSpider(NSpiderOption option)
         {
@@ -66,19 +65,45 @@ namespace TPro.Common.NSpider
             }
         }
 
+        public void Stop()
+        {
+            _spiderpool.Stop();
+        }
+
+        public void Close()
+        {
+            _spiderpool.Close();
+        }
+
+        public void Dispose()
+        {
+            _spiderpool.Stop();
+            _spiderpool.Close();
+            _spiderpool.Dispose();
+            _client.Dispose();
+        }
 
         public Func<HtmlDocument, int> HandleHtml = html => 1;
+
+        //public Func<HtmlDocument, List<string>> CountNextUrls = (html) =>
+        //{
+        //    foreach (var item in _option.NextUrlsXpaths)
+        //    {
+        //        var urls = html.DocumentNode.SelectNodes(item).Select(e => e.InnerText);
+        //        _urlpool.AddRange(urls);
+        //    }
+        //};
     }
 
     public interface INSpider : IDisposable
     {
         void Start();
 
-        string ClimbAsText();
+        //string ClimbAsText();
 
-        Stream ClimbAsStream();
+        //Stream ClimbAsStream();
 
-        HtmlDocument ClimbAsHtml();
+        //HtmlDocument ClimbAsHtml();
 
         void Stop();
 
@@ -98,5 +123,6 @@ namespace TPro.Common.NSpider
         public string StartUrl { get; set; }
 
         public List<string> NextUrlsXpaths { get; set; }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace TPro.EntityFramework.Entity
+﻿namespace TPro.EntityFramework.Entity.MyDbEntity
 {
     public class Jurisdiction
     {

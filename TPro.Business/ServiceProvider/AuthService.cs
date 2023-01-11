@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TPro.Business.IServiceProvider;
-using TPro.EntityFramework.Entity;
+using TPro.EntityFramework.Entity.MyDbEntity;
 using TPro.Models.AuthDtos;
 using TPro.Models.ResponseDtos;
 
@@ -19,7 +19,7 @@ namespace TPro.Business.ServiceProvider
         public bool IsRoleAllowed(RoutePath routePath, IEnumerable<int> roleids)
         {
             
-            using var routehelp = new EntityFramework.Data.RoutePathData();
+            using var routehelp = new EntityFramework.Data.MyDbData.RoutePathData();
             var exist = routehelp.IsPathExist(routePath.Path);
             if (exist)
             {
@@ -29,7 +29,7 @@ namespace TPro.Business.ServiceProvider
             {
                 var res = routehelp.AddThenCommit(routePath);
                 if (!res) return false;
-                using var jushelp = new EntityFramework.Data.JurisdictionData();
+                using var jushelp = new EntityFramework.Data.MyDbData.JurisdictionData();
                 var jus = new Jurisdiction()
                 {
                     RouteId = routePath.Id,
@@ -44,7 +44,7 @@ namespace TPro.Business.ServiceProvider
 
         public ResponseModel UserLogin(AuthTPUser authTPUser)
         {
-            using var userhelper = new EntityFramework.Data.TPUserData();
+            using var userhelper = new EntityFramework.Data.MyDbData.TPUserData();
             var user = userhelper.IsAccountExist(authTPUser.Account);
             if (user == null) return Fail("用户不存在，请联系管理员");
             var right = authTPUser.PassWord == user.PassWord;
