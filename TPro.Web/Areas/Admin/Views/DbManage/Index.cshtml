@@ -24,7 +24,7 @@
                 <template>
                     <el-container style="height:100%;">
                         <el-main style="height:100%;">
-                            <el-table ref="TableData" :data="TableData" style="width: 100%;" height="100%">
+                            <el-table ref="TableData" :data="TableData" style="width: 100%;">
                                 <el-table-column v-for="item,i in TableColumns" :key="i" :prop="item.Name" align="center" :label="item.Name">
                                 </el-table-column>
                                 <el-table-column label="操作">
@@ -104,7 +104,7 @@
                     </template>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary">添加</el-button>
+                    <el-button @@click="confirmentity" type="primary">确认</el-button>
                     <el-button>取消</el-button>
                 </el-form-item>
             </el-form>
@@ -118,22 +118,19 @@
         var mixin = {
             data() {
                 return {
-                    dialogVisible: false,
-                    tableinfos: [],
-                    search: '',
-                    loading: false,
                     currentPage: 1,
-                    pagesize: 10,
                     datalist: [],
-                    objectinfo: [],
+                    dialogtitle: '',
+                    dialogVisible: false,
                     drawer: false,
-                    dialogtitle:'',
-                    TableColumns: [
-
-                    ],
-                    form: {
-
-                    }
+                    form: {},
+                    loading: false,
+                    nowtablename: '',
+                    objectinfo: [],
+                    pagesize: 10,
+                    search: '',
+                    TableColumns: [],
+                    tableinfos: [],
                 }
             },
             computed: {
@@ -163,6 +160,15 @@
                 this.gettablenames();
             },
             methods: {
+                confirmentity() {
+                    axios.post("/admin/DbManage/SaveEntityInfo?entityname=" + this.nowtablename, this.objectinfo)
+                        .then((res) => {
+                            console.log(res)
+                            if (res.data.Code == 200) {
+                            }
+                        }).catch(err => console.error(err))
+                        .finally()
+                },
                 gettabledatas(item) {
                     axios.get(`/admin/DbManage/GetTableDatas?fullname=${item.value}&tablename=${item.label}`)
                         .then((res) => {
@@ -181,26 +187,21 @@
                         }).catch(err => console.error(err))
                         .finally()
                 },
-                handleAdd(){
-                    this.dialogtitle="添加"
+                handleAdd() {
+                    this.dialogtitle = "添加";
                     this.dialogVisible = true;
                 },
-                handleDelete(index,row) {
-                    
-                },
-                handleEdit(row){
+                handleDelete(index, row) { },
+                handleEdit(row) {
                     this.dialogtitle = "编辑"
                     this.dialogVisible = true;
                 },
-                handleSelectionChange(val) {
-                    this.TableColumns = val;
-                },
-                isdisabled(item) {
-
-                },
+                handleSelectionChange(val) { this.TableColumns = val; },
+                isdisabled(item) { },
                 selectitem(index, path) {
                     console.log(index, this.tableinfos[index])
                     var nowtable = this.tableinfos[index].value;
+                    this.nowtablename = nowtable
                     let item = this.tableinfos[index]
                     this.gettabledatas(item)
                     axios.get("/admin/DbManage/GetTableInfo?fullname=" + nowtable)
@@ -212,7 +213,6 @@
                             }
                         }).catch(err => console.error(err))
                         .finally()
-
                 },
             }
         }

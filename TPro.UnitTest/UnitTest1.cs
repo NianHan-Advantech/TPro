@@ -1,9 +1,12 @@
 using NUnit.Framework;
 using System;
 using System.Globalization;
+using System.Net.Mail;
 using TPro.Common.CustomSql.SystemSql;
+using TPro.Common.EMail;
 using TPro.Common.NianLog;
 using TPro.Common.NSpider;
+using TPro.Common.PinYin;
 using TPro.EntityFramework.Entity.MyDbEntity;
 
 namespace TPro.UnitTest
@@ -34,8 +37,8 @@ namespace TPro.UnitTest
         [Test]
         public void Test3()
         {
-            var t = DateTime.Now;
-            var r = t.ToString("MMM", CultureInfo.CreateSpecificCulture("en-GB"));
+            var emailservice = new NEmailServer("1",1);
+            emailservice.SendEmail(new MailMessage());
         }
 
         [Test]
@@ -43,13 +46,13 @@ namespace TPro.UnitTest
         {
             var a = DateTime.Parse("2022-1");
             var d = Convert.ToDateTime("2022-1");
+            var r = a.ToString("MMM", CultureInfo.CreateSpecificCulture("en-GB"));
         }
 
         [Test]
         public void Test5()
         {
-            var option = new NSpiderOption();
-            option.TimeInterval = 999;
+            var res = PinYinHelper.ConvertToPinYin("ÖÐ¹ú");
         }
     }
 }

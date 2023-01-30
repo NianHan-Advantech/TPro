@@ -12,24 +12,24 @@ namespace TPro.Common.AutoMapper
                 cfg.CreateMap<TSrc, TDest>();
             }).CreateMapper();
             var res = mapper.Map<TDest>(src);
-            return res == null ? new TDest() : res;
+            return res ?? new TDest();
         }
 
         public static TDest AutoMapTo<TSrc, TDest>(this TSrc src, TDest dest) where TDest : class, new()
         {
             var mapper = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<TSrc, TDest>().ReverseMap();
+                cfg.CreateMap<TSrc, TDest>();
             }).CreateMapper();
             dest = mapper.Map<TDest>(src);
-            return dest == null ? new TDest() : dest;
+            return dest ?? new TDest();
         }
 
         public static List<TDest> AutoMapTo<TSrc, TDest>(this List<TSrc> srcs)
         {
             var mapper = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<TSrc, TDest>().ReverseMap();
+                cfg.CreateMap<TSrc, TDest>();
             }).CreateMapper();
             var dests = mapper.Map<List<TDest>>(srcs);
             return dests;

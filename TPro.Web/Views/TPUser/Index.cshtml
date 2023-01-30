@@ -19,8 +19,8 @@
             <div class="login-form-title">
                 <p>登录</p>
             </div>
-            <div class="login-form-body" v-loading="loading">
-                <el-form v-model="userinfo" label-width="80px">
+            <div class="login-form-body">
+                <el-form v-model="userinfo" label-width="80px" v-loading="loading">
                     <el-form-item label="账号">
                         <el-input v-model="userinfo.Account"></el-input>
                     </el-form-item>

@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using TPro.Business.Admin.IServiceProvider;
 using TPro.Common.Extentions;
-using TPro.EntityFramework;
 using TPro.EntityFramework.DbContexts;
+using TPro.Models.Admin.DbDtos;
 using TPro.Models.Others;
 using TPro.Models.ResponseDtos;
 
@@ -53,19 +55,26 @@ namespace TPro.Business.Admin.ServiceProvider
             return list.Any() ? Success(list) : Fail();
         }
 
-        public ResponseModel GetEntityInfo(string entityname, int key)
+        public ResponseModel SaveEntityInfo(string entityname, List<EntityPropertyDto> entityProperties)
         {
             using var db = new MyDbContext();
-            db.Model.FindEntityType(entityname);
-            return Success();
-        }
-
-        public ResponseModel SaveEntityInfo()
-        {
-            using var userhelper = new EntityFramework.Data.MyDbData.TPUserData();
-            var res = userhelper.GetBy(e => e.Id > 0);
-            var rl = res.GetFieldProperties();
-            return Success(rl);
+            var entitytype = db.Model.FindEntityType(entityname).ClrType;
+            var entity = entitytype.GetDefaultValue();
+            var properties = entitytype.GetProperties();
+            foreach (var property in properties)
+            {
+                var pro = entityProperties.FirstOrDefault(p => p.Name == property.Name);
+                if (pro == null) continue;
+                var value =(JsonElement)pro.Value;
+                var nvalue = value.ToValue(property.PropertyType);
+                if (nvalue != null)
+                {
+                    property.SetValue(entity, nvalue, null);
+                }
+            }
+            db.Add(entity);
+            var res = db.SaveChanges();
+            return res > 0 ? Success() : Fail();
         }
     }
 }

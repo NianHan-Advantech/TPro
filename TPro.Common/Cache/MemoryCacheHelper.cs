@@ -35,6 +35,13 @@ namespace TPro.Common.Cache
             return Cache.TryGetValue(key, out _);
         }
 
+        public T HasKey<T>(string key) where T : class, new()
+        {
+            var t = new T();
+            Cache.TryGetValue(key, out t);
+            return t;
+        }
+
         /// <summary>
         /// 添加缓存
         /// </summary>

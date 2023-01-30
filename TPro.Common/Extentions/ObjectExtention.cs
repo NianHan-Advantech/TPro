@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 
 namespace TPro.Common.Extentions
 {
@@ -11,26 +13,53 @@ namespace TPro.Common.Extentions
             return obj.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToList();
         }
 
-        public static Dictionary<string, string> GetFieldProperties1(this object obj)
+        /// <summary>
+        /// 通过属性名获取对象值
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static dynamic GetValue(this object obj, string name)
         {
-            var fps = new Dictionary<string, string>();
-            if (obj == null)
+            var property = obj.GetType().GetProperty(name);
+            return Convert.ChangeType(property.GetValue(obj), property.PropertyType);
+        }
+
+        public static dynamic JavascriptTypeToValue(this object obj)
+        {
+            return 1;
+        }
+    }
+    public static class JsonElementExtention
+    {
+
+        public static dynamic ToValue(this JsonElement element)
+        {
+            switch (element.ValueKind)
             {
-                return fps;
+                case JsonValueKind.Undefined:
+                    break;
+                case JsonValueKind.Object:
+                    break;
+                case JsonValueKind.Array:
+                    break;
+                case JsonValueKind.String:
+                    return element.GetString();
+                case JsonValueKind.Number:
+                    return element.GetInt32();
+                case JsonValueKind.True:
+                case JsonValueKind.False:
+                    return element.GetBoolean();
+                case JsonValueKind.Null:
+                    return null;
+                default:
+                    break;
             }
-            var properties = obj.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
-            if (properties.Length <= 0)
-            {
-                return fps;
-            }
-            foreach (var item in properties)
-            {
-                if (item.PropertyType.IsValueType || item.PropertyType.Name.StartsWith("String"))
-                {
-                    fps.Add(item.Name, item.PropertyType.Name);
-                }
-            }
-            return fps;
+            return null;
+        }
+        public static dynamic ToValue(this JsonElement element, Type propertytype)
+        {
+            return Convert.ChangeType(element.ToValue(), propertytype);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace TPro.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult getmsg()
+        public IActionResult Getmsg()
         {
             _memoryCache.Set(CacheKeys.Entry, "hello");
             return Ok();
