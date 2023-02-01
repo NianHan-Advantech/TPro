@@ -27,7 +27,7 @@ namespace TPro.Web.Controllers
 
         public IActionResult Privacy()
         {
-            _logger.LogError("hello log");
+            _logger.LogInformation("hello log");
             return View();
         }
 

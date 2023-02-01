@@ -10,7 +10,7 @@ namespace TPro.Web.Configs
     {
         #region Log Config
 
-        public static NianLogProvider logProvider = new NianLogProvider(option =>
+        public static NianLogProvider logProvider = new(option =>
         {
             option.UseSqliteStorage("Data Source=E:\\MvcTest\\templatedb.db;");
         });

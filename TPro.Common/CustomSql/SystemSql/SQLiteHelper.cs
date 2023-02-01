@@ -32,7 +32,7 @@ namespace TPro.Common.CustomSql.SystemSql
         /// 创建一个数据库文件。如果存在同名数据库文件，则会覆盖。
         /// </summary>
         /// <param name="dbName"></param>
-        public void CreateDbFile(string dbName)
+        public static void CreateDbFile(string dbName)
         {
             if (!string.IsNullOrEmpty(dbName))
             {
@@ -55,8 +55,8 @@ namespace TPro.Common.CustomSql.SystemSql
         public bool TableExist(string table)
         {
             var CommandText = "SELECT COUNT(*) FROM sqlite_master where type='table' and name='" + table + "';";
-            var row = ExecuteNonQuery(CommandText);
-            return row > 0;
+            var rtable = ExecuteQuery(CommandText);
+            return rtable.Rows.Count > 0;
         }
 
         /// <summary>
@@ -121,23 +121,11 @@ namespace TPro.Common.CustomSql.SystemSql
         public int Add<T>(string table, T t) where T : class
         {
             var properties = t.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
-            var sql = $"INSERT INTO {table} (";
-            foreach (var item in properties)
-            {
-                if (item.Name.ToLower() != "id")
-                {
-                    sql += item.Name + ",";
-                }
-            }
-            sql += ") VALUES (";
-            foreach (var item in properties)
-            {
-                if (item.Name.ToLower() != "id")
-                {
-                    sql += item.GetValue(t).ToString() + ",";
-                }
-            }
-            sql += ")";
+            var fileds = properties.Where(e => e.Name.ToLower() != "id").Select(e => e.Name).ToArray();
+            var filedstr = string.Join(",", fileds);
+            var values = properties.Where(e => e.Name.ToLower() != "id").Select(e => e.PropertyType.IsValueType ? e.GetValue(t) : $"'{e.GetValue(t)}'").ToArray();
+            var valuestr = string.Join(",", values);
+            var sql = $"INSERT INTO {table} ({filedstr}) VALUES ({valuestr})";
             return ExecuteNonQuery(sql);
         }
 

@@ -8,9 +8,6 @@ namespace TPro.Common.NianLog
         private readonly NianLogConfiguration _configuration = new();
         private readonly string _categoryName;
 
-        public NianLogger()
-        { }
-
         public NianLogger(NianLogConfiguration configuration, string categoryName)
         {
             _configuration = configuration;
