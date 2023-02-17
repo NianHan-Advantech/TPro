@@ -7,7 +7,7 @@ namespace TPro.Web.Controllers
     [Route("[controller]/[action]")]
     [Authorize]
     [RequestLogFilter]
-    [TypeFilter(typeof(CustomAuthorizeFilter))]
+    [TypeFilter(typeof(NAuthorizeFilter))]
     public class BaseController : Controller
     {
         /// <summary>

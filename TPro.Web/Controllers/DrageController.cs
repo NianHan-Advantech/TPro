@@ -8,6 +8,10 @@ namespace TPro.Web.Controllers
         {
             return View();
         }
+        public IActionResult FabricIndex()
+        {
+            return View();
+        }
 
     }
 }

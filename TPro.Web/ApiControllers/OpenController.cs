@@ -10,7 +10,7 @@ namespace TPro.Web.ApiControllers
         [HttpGet]
         public IActionResult GetMsg()
         {
-            return Ok();
+            return Ok("后端消息");
         }
     }
 }

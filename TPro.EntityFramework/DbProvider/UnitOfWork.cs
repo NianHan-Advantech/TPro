@@ -20,6 +20,10 @@ namespace TPro.EntityFramework.DbProvider
             _context = new MyDbContext(dbType);
         }
 
+        public UnitOfWork(DbContext dbContext)
+        {
+            _context = dbContext;
+        }
         public bool Committed { get; private set; }
 
         public int Commit()

@@ -3,6 +3,7 @@ using TPro.EntityFramework.Entity.MyDbEntity;
 
 namespace TPro.EntityFramework.DbContexts
 {
+
     public class MyDbContext : BaseDbContext
     {
         private readonly string _DbConnectStr;
@@ -12,11 +13,11 @@ namespace TPro.EntityFramework.DbContexts
             switch (dbType)
             {
                 case DbAttr.OfficialStation:
-                    _DbConnectStr = "Data Source=E:\\MvcTest\\templatedb.db;";
+                    _DbConnectStr = "Data Source=E:\\MvcTest\\TPro.Web\\templatedb.db;";
                     break;
 
                 case DbAttr.TestStation:
-                    _DbConnectStr = "Data Source=E:\\MvcTest\\templatedb.db;";
+                    _DbConnectStr = "Data Source=E:\\MvcTest\\TPro.Web\\templatedb.db;";
                     break;
 
                 default:

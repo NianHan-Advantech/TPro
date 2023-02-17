@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -18,6 +19,7 @@ using TPro.Business.Admin.ServiceProvider;
 using TPro.Business.IServiceProvider;
 using TPro.Business.ServiceProvider;
 using TPro.Common.Cache;
+using TPro.EntityFramework.DbContexts;
 using TPro.Models.AutoMapperConfig;
 using TPro.Web.Configs;
 
@@ -41,6 +43,7 @@ namespace TPro.Web
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
             });
 
+            services.AddDbContext<MyDbContext>(CustomConfigs.dbcontextoption);
 
             #region Hangfire
 
@@ -111,7 +114,7 @@ namespace TPro.Web
             #endregion AutoMapper
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -134,7 +137,7 @@ namespace TPro.Web
             });
 
             #endregion SwaggerUI
-            
+
             loggerFactory.AddProvider(CustomConfigs.logProvider);
             app.Use((context, next) =>
             {
@@ -145,10 +148,10 @@ namespace TPro.Web
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()
             {
-                FileProvider = new PhysicalFileProvider("F:\\staticdir"),
+                FileProvider = new PhysicalFileProvider($"{CustomConfigs.currentpath}\\staticdir"),
                 RequestPath = "/staticdir"
             });
- 
+
             app.UseRouting();
             app.UseCors(CustomConfigs.CorsSampleCorsPolicy);//∆Ù”√øÁ”Ú
             app.UseAuthentication();

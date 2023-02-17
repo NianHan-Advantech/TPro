@@ -1,0 +1,232 @@
+﻿@{
+    ViewData["Title"] = "Fabric Page";
+}
+
+<div>
+    <el-container>
+        <el-main>
+            <div class="canvas-container" style="float:left;">
+                <canvas id="labelcanvas" width="600" height="400" style="border:1px solid #ccc">     </canvas>
+            </div>
+        </el-main>
+        <el-aside>
+            <el-collapse v-model="activeNames">
+                <el-collapse-item title="" name="1">
+                    <el-button @@click="initcanvas">创建</el-button>
+                    <el-button @@click="clearcanvas">清除</el-button>
+                </el-collapse-item>
+                <el-collapse-item title="" name="2">
+                    <el-button @@click="addcricle">圆</el-button>
+                    <el-button @@click="addinfobox">infobox</el-button>
+                </el-collapse-item>
+                <el-collapse-item title="" name="3">
+                    <el-button @@click="selectcurrentobj">当前对象</el-button>
+                    <el-button @@click="removeobj">删除</el-button>
+                </el-collapse-item>
+                <el-collapse-item title="" name="4">
+                    <el-button @@click="alignelement('left')">左对齐</el-button>
+                    <el-button @@click="alignelement('horizontalCenter')">水平居中</el-button>
+                    <el-button @@click="alignelement('right')">右对齐</el-button>
+                    <el-button @@click="alignelement('top')">顶部对齐</el-button>
+                    <el-button @@click="alignelement('verticalCenter')">垂直居中</el-button>
+                    <el-button @@click="alignelement('bottom')">底部对齐</el-button>
+                    <el-button @@click="alignelement('verticalEqual')">垂直均分</el-button>
+                    <el-button @@click="alignelement('horizontalEqual')">水平均分</el-button>
+                </el-collapse-item>
+            </el-collapse>
+        </el-aside>
+    </el-container>
+
+</div>
+
+
+
+@section Scripts{
+    <script src="~/lib/fabricjs/index.js"></script>
+    <script type="module">
+        import { ActionAlign } from "../lib/fabricjs/ActionAlign.js"
+    </script>
+    <script>
+        var mixin = {
+            data() {
+                return {
+                    currentcanvas: {},
+                    currentobj: {},
+                    activeNames: '1',
+                    times: 1,
+                    cricles: []
+                }
+            },
+            computed: {
+
+            },
+            mounted() {
+
+            },
+            methods: {
+                addcricle() {
+                    let ncricle = new fabric.Circle({
+                        eid: 1,
+                        type: 'circle',
+                        radius: 40,
+                        left: 50,
+                        top: 50,
+                        fill: 'rgb(0,255,0)',
+                    })
+                    this.cricles.push(ncricle)
+                    this.currentcanvas.add(ncricle)
+                },
+                addinfobox() {
+                    let rectop = 10
+                    let recleft = 10
+                    let recwidth = 300
+                    let recheight = 400
+                    var infobox = new fabric.Rect({
+                        top: rectop,
+                        left: recleft,
+                        width: recwidth,
+                        height: recheight,
+                        visible: true,
+                        selectable: false,
+                        backgroundcolor: 'red',
+                        opacity: 0.2,
+                        fill: 'rgb(0,255,0)'
+                    })
+                    this.currentcanvas.add(infobox)
+                    this.currentcanvas.on('object:moving', function (e) {
+                        // 阻止对象移动到画布外面
+                        let obj = e.target;
+                        let padding = 10;
+                        let paddingTop = -obj.getBoundingRect().height + padding + rectop; // 内容距离画布的空白宽度，主动设置
+                        let paddingLeft = -obj.getBoundingRect().width + padding + recleft;
+                        obj.setCoords();
+                        // console.log("e.target", e.target, e.target.getBoundingRect());
+                        // top-left corner
+                        if (obj.getBoundingRect().top < paddingTop ||
+                            obj.getBoundingRect().left < paddingLeft) {
+                            obj.top = rectop + recheight / 2 - obj.getBoundingRect().height / 2;
+                            obj.left = recleft + recwidth / 2 - obj.getBoundingRect().width / 2;
+                        }
+                        // bot-right corner
+                        if (obj.getBoundingRect().top > rectop + recheight - padding ||
+
+                            obj.getBoundingRect().left > recleft + recwidth - padding) {
+                            obj.top = rectop + recheight / 2 - obj.getBoundingRect().height / 2;
+
+                            obj.left = recleft + recwidth / 2 - obj.getBoundingRect().width / 2;
+
+                        }
+
+                    });
+                },
+                clearcanvas() {
+                    this.currentcanvas.clear()
+                },
+                initcanvas() {
+                    console.log(1)
+                    this.currentcanvas = new fabric.Canvas('labelcanvas');
+                    this.currentcanvas.setBackgroundImage("../images/label2000033309.svg", this.currentcanvas.renderAll.bind(this.currentcanvas), {
+                        width: this.currentcanvas.width,
+                        height: this.currentcanvas.height
+                    })
+                },
+                selectcurrentobj() {
+                    var active = this.currentcanvas._activeObject ?? this.currentcanvas._activeGroup
+                    var res = this.currentcanvas.getSelectionContext()
+                    this.currentobj = res;
+                    console.log(active)
+                },
+                alignelement(pos) {
+                    this.doAlign(this.currentcanvas, pos);
+                },
+                doAlign(canvas, pos) {
+                    if (canvas._activeGroup._objects.length < 2) {
+                        return false;
+                    }
+                    // 记录总宽或总高
+                    let totalL = 0, arrL = [], eachL = 0;
+                    if (['horizontalEqual', 'verticalEqual'].includes(pos)) {
+                        let horizontal = 'horizontalEqual' === pos;
+                        // 水平/垂直等分 需要排序
+                        canvas._activeGroup._objects.sort((a, b) => {
+                            return horizontal ? a.aCoords.tl.x - b.aCoords.tl.x : a.aCoords.tl.y - b.aCoords.tl.y;
+                        });
+                        // 记录每个元素 宽度/高度，并记录总宽/高
+                        canvas._activeGroup._objects.forEach((item) => {
+                            arrL.push(horizontal ? item.width : item.height);
+                            totalL += horizontal ? item.width : item.height;
+                        });
+                        // 根据 total 计算等分间隔
+                        eachL = ((horizontal ? canvas._activeGroup.width : canvas._activeGroup.height) - 1 - totalL) / (canvas._activeGroup._objects.length - 1);
+                    }
+                    canvas._activeGroup._objects.forEach((item, sub) => {
+                        item.set(this.getPositions(canvas, pos, item, sub, eachL, arrL));
+                    });
+                    // 渲染
+                    canvas.renderAll();
+                },
+                removeobj() {
+                    this.cricles.forEach(item => {
+                        this.currentcanvas.remove(item)
+                    })
+                },
+                getPositions(canvas, pos, item, sub, eachL, arrL) {
+                    let params = {};
+                    let cHeight = canvas._activeGroup.height;
+                    let csHeight = canvas._activeGroup.height - 1; // 去除误差，可能为选项框宽度
+                    let cWidth = canvas._activeGroup.width;
+                    let csWidth = canvas._activeGroup.width - 1; // 去除误差，可能为选项框宽度
+                    switch (pos) {
+                        case 'top':
+                            params = {
+                                top: 0 - cHeight * 0.5,
+                            };
+                            break;
+                        case 'left':
+                            params = {
+                                left: 0 - cWidth * 0.5,
+                            };
+                            break;
+                        case 'right':
+                            params = {
+                                left: csWidth - item.width - cWidth * 0.5,
+                            };
+                            break;
+                        case 'bottom':
+                            params = {
+                                top: csHeight - item.height - cHeight * 0.5,
+                            };
+                            break;
+                        case 'horizontalCenter': // 水平居中
+                            params = {
+                                top: (csHeight - item.height) * 0.5 - cHeight * 0.5,
+                            };
+                            break;
+                        case 'verticalCenter': // 垂直居中
+                            params = {
+                                left: (csWidth - item.width) * 0.5 - cWidth * 0.5,
+                            };
+                            break;
+                        case 'horizontalEqual': // 水平等分
+                        case 'verticalEqual': // 垂直等分
+                            // 首项末项不需要动
+                            if (sub !== 0 && sub !== canvas._activeGroup._objects.length - 1) {
+                                // 计算当前元素之前元素的宽度并加上相应间距*sub
+                                let total = 0, isHorizontalEqual = 'horizontalEqual' === pos;
+                                arrL.map((l, s) => {
+                                    if (s > sub) {
+                                        total += l;
+                                    }
+                                });
+                                params[isHorizontalEqual ? 'left' : 'top'] = total + sub * eachL - (isHorizontalEqual ? csWidth : csHeight) * 0.5;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    return params;
+                }
+            }
+        }
+    </script>
+}

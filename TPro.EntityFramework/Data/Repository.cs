@@ -9,7 +9,7 @@ namespace TPro.EntityFramework.Data
 {
     public class Repository<T> : IRepository where T : class, new()
     {
-        private readonly IUnitOfWork _unitOfWork;
+        internal protected IUnitOfWork _unitOfWork;
 
         /// <summary>
         /// 带入 Unit Of Work Name

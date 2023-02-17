@@ -9,11 +9,11 @@ using TPro.EntityFramework.Entity.MyDbEntity;
 
 namespace TPro.Web.Filters
 {
-    public class CustomAuthorizeFilter : Attribute, IAuthorizationFilter
+    public class NAuthorizeFilter : Attribute, IAuthorizationFilter
     {
         private readonly IAuthService _authService;
 
-        public CustomAuthorizeFilter(IAuthService authService)
+        public NAuthorizeFilter(IAuthService authService)
         {
             _authService = authService;
         }

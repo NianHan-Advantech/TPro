@@ -60,15 +60,21 @@
     <script src="~/lib/elementui.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     <script>
-        var app = new Vue({
+
+        try{
+            Vue.mixin(mixin)
+        }catch{
+            console.warn("mixin is undefined!")
+        }
+        new Vue({
             el: '#app',
-            mixins: [mixin],
             data() {
                 return {
                     activeIndex: '1',
                     routes: [
                         { Name: 'System Icon', IconPath: '', RoutePath: '/', Children: [] },
                         { Name: 'DRR', IconPath: '', RoutePath: '/Drage/Index', Children: [] },
+                        { Name: 'Fabric Canvas', IconPath: '', RoutePath: '/Drage/FabricIndex', Children: [] },
                     ],
                     userinfo: ''
                 }
